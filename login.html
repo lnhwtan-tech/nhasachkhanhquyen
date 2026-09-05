@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Nhập - Nhà Sách Khánh Quyên</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Thêm thư viện Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -24,25 +23,19 @@
     </script>
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
-<body class="bg-slate-900 text-slate-800 min-h-screen flex items-center justify-center p-6 relative overflow-x-hidden">
-
-    <!-- HIỆU ỨNG NỀN TRANG TRÍ -->
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-
-    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden relative z-10 my-8">
-        
-        <!-- HEADER FORM -->
-        <div class="bg-dark text-white p-8 text-center relative">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center p-6 relative overflow-x-hidden">
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-2"></div>
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden relative z-10 my-8">
+        <div class="bg-slate-900 text-white p-8 text-center relative">
             <a href="index.html" class="absolute top-6 left-6 bg-slate-800 hover:bg-slate-700 w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 transition" title="Về trang chủ">
                 <i class="fa-solid fa-house text-sm"></i>
             </a>
             <div class="bg-brand-600 text-white w-12 h-12 rounded-2xl mx-auto flex items-center justify-center font-extrabold text-xl shadow-lg mb-3">KQ</div>
             <h1 class="text-2xl font-extrabold tracking-tight">Đăng Nhập Hệ Thống</h1>
-            <p class="text-xs text-slate-400 mt-1">Chào mừng bạnquay trở lại với Khánh Quyên</p>
+            <p class="text-xs text-slate-400 mt-1">Chào mừng bạn quay trở lại với Khánh Quyên</p>
         </div>
-
-        <!-- FORM ĐĂNG NHẬP -->
         <form onsubmit="handleLogin(event)" class="p-8 space-y-5">
             <div>
                 <label class="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider">Tên tài khoản (Username)</label>
@@ -51,7 +44,6 @@
                     <input type="text" id="username" placeholder="Nhập username của bạn..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
                 </div>
             </div>
-
             <div>
                 <div class="flex items-center justify-between mb-2">
                     <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider">Mật khẩu</label>
@@ -59,30 +51,38 @@
                 </div>
                 <div class="relative">
                     <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-lock"></i></span>
-                    <input type="password" id="password" placeholder="Nhập mật khẩu..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                    <input type="password" id="password" placeholder="Nhập mật khẩu..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-11 py-3.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                    <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400 hover:text-slate-600 transition" title="Ẩn/Hiện mật khẩu">
+                        <i id="toggle-password-icon" class="fa-solid fa-eye"></i>
+                    </button>
                 </div>
             </div>
-
-            <button type="submit" id="login-btn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-600/30 transition text-sm flex items-center justify-center gap-2">
+            <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" id="remember-me" class="w-4 h-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500">
+                    <span class="text-xs text-slate-600 font-medium">Ghi nhớ đăng nhập</span>
+                </label>
+            </div>
+            <button type="submit" id="login-btn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-600/25 transition text-sm flex items-center justify-center gap-2">
                 <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Ngay
             </button>
-
+            <button type="button" onclick="handleBiometricLogin()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 rounded-xl transition text-sm flex items-center justify-center gap-2 border border-slate-200">
+                <i class="fa-solid fa-fingerprint text-brand-600 text-lg"></i> Đăng Nhập Bằng Vân Tay / FaceID
+            </button>
             <div class="text-center pt-3 border-t border-slate-100 flex flex-col gap-2">
                 <div>
                     <span class="text-xs text-slate-500">Chưa có tài khoản trên hệ thống?</span> 
                     <a href="register.html" class="text-xs font-bold text-brand-600 hover:underline ml-1">Đăng ký ngay</a>
                 </div>
                 <div>
-                    <a href="index.html" class="text-xs font-bold text-slate-400 hover:text-slate-700 transition"><i class="fa-solid fa-arrow-left mr-1"></i> Về Trang Chủ</a>
+                    <a href="index.html" class="text-xs font-bold text-slate-400 hover:text-slate-600 transition"><i class="fa-solid fa-arrow-left mr-1"></i> Về Trang Chủ</a>
                 </div>
             </div>
         </form>
     </div>
-
-    <!-- MODAL QUÊN MẬT KHẨU -->
-    <div id="forgotPasswordModal" class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div id="forgotPasswordModal" class="fixed inset-0 bg-slate-950/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 max-w-md w-full overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div class="bg-dark text-white p-6 relative">
+            <div class="bg-slate-900 text-white p-6 relative">
                 <button type="button" onclick="closeForgotPasswordModal()" class="absolute top-5 right-5 text-slate-400 hover:text-white transition">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
@@ -92,7 +92,6 @@
                 <h3 class="text-lg font-extrabold">Khôi Phục Mật Khẩu</h3>
                 <p class="text-xs text-slate-400 mt-0.5">Nhập thông tin tài khoản và email đã đăng ký để đặt mật khẩu mới.</p>
             </div>
-
             <form onsubmit="handleForgotPassword(event)" class="p-6 space-y-4">
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Tên tài khoản (Username)</label>
@@ -101,7 +100,6 @@
                         <input type="text" id="forgot-username" placeholder="Nhập username của bạn..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Email đã đăng ký</label>
                     <div class="relative">
@@ -109,7 +107,6 @@
                         <input type="email" id="forgot-email" placeholder="example@gmail.com..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase tracking-wider">Mật khẩu mới</label>
                     <div class="relative">
@@ -117,7 +114,6 @@
                         <input type="password" id="forgot-new-password" placeholder="Nhập mật khẩu mới..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
                     </div>
                 </div>
-
                 <div class="pt-2 flex gap-3">
                     <button type="button" onclick="closeForgotPasswordModal()" class="w-1/3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold py-3 rounded-xl transition text-sm">Hủy</button>
                     <button type="submit" id="forgot-btn" class="w-2/3 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-brand-600/30 transition text-sm">Xác Nhận Đổi</button>
@@ -125,117 +121,204 @@
             </form>
         </div>
     </div>
-
     <script>
         const supabaseUrl = 'https://dngnkhzliwsdmytrvoae.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuZ25raHpsaXdzZG15dHJ2b2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MDkyMjcsImV4cCI6MjEwMzk4NTIyN30.fqZuesECwMbvbcnc4XSyGZZrPxTG5YbrPk1MlNHZB58';
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUsername = localStorage.getItem('remembered_username');
+            if (savedUsername) {
+                document.getElementById('username').value = savedUsername;
+                document.getElementById('remember-me').checked = true;
+            }
+        });
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const bgColors = type === 'success' ? 'bg-emerald-600 text-white' : (type === 'error' ? 'bg-red-600 text-white' : 'bg-slate-800 text-white');
+            const icon = type === 'success' ? 'fa-circle-check' : (type === 'error' ? 'fa-triangle-exclamation' : 'fa-circle-info');
+            toast.className = `flex items-center gap-3 px-5 py-3.5 rounded-2xl shadow-xl text-sm font-medium transition transform translate-y-2 opacity-0 duration-300 ${bgColors}`;
+            toast.innerHTML = `<i class="fa-solid ${icon} text-lg"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const icon = document.getElementById('toggle-password-icon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                icon.className = 'fa-solid fa-eye';
+            }
+        }
+        let failedAttempts = parseInt(localStorage.getItem('login_failed_attempts') || '0');
+        let lockUntil = parseInt(localStorage.getItem('login_lock_until') || '0');
+        function checkBruteForceLock() {
+            const now = Date.now();
+            if (now < lockUntil) {
+                const remainingSeconds = Math.ceil((lockUntil - now) / 1000);
+                showToast(`Bạn đã nhập sai quá nhiều lần. Vui lòng thử lại sau ${remainingSeconds} giây!`, 'error');
+                return true;
+            }
+            return false;
+        }
         async function handleLogin(e) {
             e.preventDefault();
+            if (checkBruteForceLock()) return;
             const loginBtn = document.getElementById('login-btn');
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
-            
+            const rememberMe = document.getElementById('remember-me').checked;
             loginBtn.disabled = true;
             loginBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Đang xác thực...`;
-
             try {
                 const { data: user, error } = await supabaseClient
                     .from('users')
                     .select('*')
                     .eq('username', username)
                     .maybeSingle();
-
                 if (error) throw error;
-
-                if (!user) {
-                    showCustomAlert("Thông báo", 'Tên đăng nhập không tồn tại trên hệ thống!', "info");
+                if (!user || user.password !== password) {
+                    failedAttempts++;
+                    localStorage.setItem('login_failed_attempts', failedAttempts);
+                    if (failedAttempts >= 5) {
+                        lockUntil = Date.now() + 30000; 
+                        localStorage.setItem('login_lock_until', lockUntil);
+                        showToast('Nhập sai quá 5 lần! Tài khoản tạm khóa trong 30 giây.', 'error');
+                    } else {
+                        showToast(`Tên đăng nhập hoặc mật khẩu không chính xác! (Sai lần ${failedAttempts}/5)`, 'error');
+                    }
                     loginBtn.disabled = false;
                     loginBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Ngay`;
                     return;
                 }
-
-                if (user.password !== password) {
-                    showCustomAlert("Thông báo", 'Mật khẩu không chính xác!', "info");
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Ngay`;
-                    return;
-                }
-
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                alert('Đăng nhập thành công! Chào mừng ' + user.full_name);
-
-                if (user.role === 'admin') {
-                    window.location.href = 'admin.html';
+                localStorage.removeItem('login_failed_attempts');
+                localStorage.removeItem('login_lock_until');
+                if (rememberMe) {
+                    localStorage.setItem('remembered_username', username);
                 } else {
-                    window.location.href = 'index.html';
+                    localStorage.removeItem('remembered_username');
                 }
-
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showToast(`Đăng nhập thành công! Chào mừng ${user.full_name}`, 'success');
+                setTimeout(() => {
+                    if (user.role === 'admin') {
+                        window.location.href = 'admin.html';
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }, 1000);
             } catch (err) {
                 console.error('Lỗi đăng nhập:', err.message);
-                alert('Có lỗi xảy ra khi kết nối cơ sở dữ liệu: ' + err.message);
+                showToast('Có lỗi xảy ra khi kết nối cơ sở dữ liệu!', 'error');
                 loginBtn.disabled = false;
                 loginBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Ngay`;
             }
         }
-
-        // Các hàm xử lý Quên mật khẩu
+        function checkBiometricSupport() {
+            return window.PublicKeyCredential && window.PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+        }
+        async function handleBiometricLogin() {
+            const isSupported = await checkBiometricSupport();
+            if (!isSupported) {
+                showToast('Thiết bị hoặc trình duyệt của bạn không hỗ trợ bảo mật sinh trắc học!', 'error');
+                return;
+            }
+            const usernameInput = document.getElementById('username').value.trim();
+            const savedUsername = usernameInput || localStorage.getItem('remembered_username');
+            if (!savedUsername) {
+                showToast('Vui lòng nhập tên tài khoản (Username) vào ô trước khi dùng sinh trắc học!', 'error');
+                document.getElementById('username').focus();
+                return;
+            }
+            try {
+                showToast('Đang kích hoạt cảm biến sinh trắc học...', 'info');
+                const challenge = new Uint8Array([21, 31, 105, 47, 100, 52, 63, 85]);
+                const options = {
+                    publicKey: {
+                        challenge: challenge,
+                        timeout: 60000,
+                        userVerification: "required",
+                    }
+                };
+                const credential = await navigator.credentials.get(options);
+                if (credential) {
+                    const { data: user, error } = await supabaseClient
+                        .from('users')
+                        .select('*')
+                        .eq('username', savedUsername)
+                        .maybeSingle();
+                    if (error || !user) {
+                        showToast('Không tìm thấy tài khoản tương ứng trên hệ thống!', 'error');
+                        return;
+                    }
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('remembered_username', savedUsername);
+                    showToast(`Xác thực vân tay/FaceID thành công! Chào ${user.full_name}`, 'success');
+                    setTimeout(() => {
+                        if (user.role === 'admin') {
+                            window.location.href = 'admin.html';
+                        } else {
+                            window.location.href = 'index.html';
+                        }
+                    }, 1000);
+                }
+            } catch (err) {
+                console.error('Lỗi sinh trắc học:', err);
+                showToast('Xác thực sinh trắc học không thành công hoặc đã bị hủy!', 'error');
+            }
+        }
         function openForgotPasswordModal() {
             document.getElementById('forgotPasswordModal').classList.remove('hidden');
         }
-
         function closeForgotPasswordModal() {
             document.getElementById('forgotPasswordModal').classList.add('hidden');
             document.getElementById('forgot-username').value = '';
             document.getElementById('forgot-email').value = '';
             document.getElementById('forgot-new-password').value = '';
         }
-
         async function handleForgotPassword(e) {
             e.preventDefault();
             const forgotBtn = document.getElementById('forgot-btn');
             const username = document.getElementById('forgot-username').value.trim();
             const email = document.getElementById('forgot-email').value.trim();
             const newPassword = document.getElementById('forgot-new-password').value.trim();
-
             forgotBtn.disabled = true;
             forgotBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Đang kiểm tra...`;
-
             try {
-                // Kiểm tra xem username và email có khớp với tài khoản nào không
                 const { data: user, error } = await supabaseClient
                     .from('users')
                     .select('*')
                     .eq('username', username)
                     .eq('email', email)
                     .maybeSingle();
-
                 if (error) throw error;
-
                 if (!user) {
-                    showCustomAlert("Thông báo", 'Không tìm thấy tài khoản khớp với Tên đăng nhập và Email đã nhập!', "info");
+                    showToast('Không tìm thấy tài khoản khớp với Tên đăng nhập và Email đã nhập!', 'error');
                     forgotBtn.disabled = false;
                     forgotBtn.innerHTML = `Xác Nhận Đổi`;
                     return;
                 }
-
-                // Cập nhật mật khẩu mới vào cơ sở dữ liệu
                 const { error: updateError } = await supabaseClient
                     .from('users')
                     .update({ password: newPassword })
                     .eq('id', user.id);
-
                 if (updateError) throw updateError;
-
-                showCustomAlert("Thông báo", 'Đặt lại mật khẩu thành công! Bạn có thể dùng mật khẩu mới để đăng nhập.', "info");
+                showToast('Đặt lại mật khẩu thành công! Bạn có thể dùng mật khẩu mới.', 'success');
                 closeForgotPasswordModal();
                 forgotBtn.disabled = false;
                 forgotBtn.innerHTML = `Xác Nhận Đổi`;
-
             } catch (err) {
                 console.error('Lỗi đổi mật khẩu:', err.message);
-                alert('Có lỗi xảy ra: ' + err.message);
+                showToast('Có lỗi xảy ra: ' + err.message, 'error');
                 forgotBtn.disabled = false;
                 forgotBtn.innerHTML = `Xác Nhận Đổi`;
             }

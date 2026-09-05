@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chính Sách Bảo Mật - Nhà Sách Khánh Quyên</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand': { 50: '#fef2f2', 100: '#fee2e2', 500: '#ef4444', 600: '#dc2626', 700: '#b91c1c' },
+                        'dark': '#0f172a',
+                    },
+                    fontFamily: { 'sans': ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<header class="bg-white border-b border-slate-100 sticky top-0 z-40">
+    <div class="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-white shadow-sm border border-slate-100 flex items-center justify-center overflow-hidden p-1">
+                <img src="khanhquyen.png" alt="Logo Khánh Quyên" class="w-full h-full object-contain rounded-lg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="w-full h-full bg-brand-600 text-white font-extrabold text-xs rounded-lg items-center justify-center hidden">KQ</div>
+            </div>
+            <span class="font-bold text-slate-900 tracking-tight text-base sm:text-lg">Nhà Sách Khánh Quyên</span>
+        </a>
+        <a href="register.html" class="text-xs font-bold text-slate-600 hover:text-brand-600 flex items-center gap-2 transition">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại đăng ký
+        </a>
+    </div>
+</header>
+    <main class="max-w-4xl mx-auto px-6 py-10 flex-grow">
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 p-8 sm:p-12 space-y-8">
+            <div>
+                <div class="inline-block bg-brand-50 text-brand-600 text-xs font-bold px-3 py-1 rounded-full mb-3 uppercase tracking-wider">Pháp lý & Bảo mật</div>
+                <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Chính Sách Bảo Mật Thông Tin</h1>
+                <p class="text-xs sm:text-sm text-slate-400 mt-2">Cập nhật lần cuối: Tháng 05/2026</p>
+            </div>
+            <hr class="border-slate-100">
+            <div class="space-y-6 text-sm text-slate-600 leading-relaxed">
+                <section class="space-y-3">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-7 h-7 bg-slate-100 text-slate-900 rounded-lg flex items-center justify-center text-xs">1</span> 
+                        Mục Đích Thu Thập Thông Tin
+                    </h2>
+                    <p>Nhà sách & Văn phòng phẩm Khánh Quyên cam kết bảo mật tuyệt đối thông tin cá nhân của quý khách hàng. Việc thu thập dữ liệu trên website bao gồm: họ tên, email, số điện thoại, tên tài khoản và địa chỉ nhằm mục đích:</p>
+                    <ul class="list-disc list-inside space-y-1 pl-2 text-slate-600">
+                        <li>Hỗ trợ xác thực tài khoản thông qua hệ thống mã OTP bảo mật.</li>
+                        <li>Giải quyết đơn hàng, giao sách và văn phòng phẩm đến tay khách hàng nhanh chóng.</li>
+                        <li>Cung cấp thông tin về các chương trình khuyến mãi, sách mới hoặc ưu đãi thành viên (nếu khách hàng đồng ý).</li>
+                    </ul>
+                </section>
+                <section class="space-y-3">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-7 h-7 bg-slate-100 text-slate-900 rounded-lg flex items-center justify-center text-xs">2</span> 
+                        Phạm Vi Sử Dụng Thông Tin
+                    </h2>
+                    <p>Chúng tôi sử dụng thông tin thành viên cung cấp để quản lý tài khoản, nâng cao chất lượng dịch vụ chăm sóc khách hàng và liên hệ xác nhận đơn hàng khi cần thiết. Khánh Quyên cam kết <strong>không bán, trao đổi hoặc chia sẻ</strong> thông tin cá nhân của khách hàng cho bất kỳ bên thứ ba nào vì mục đích thương mại trái phép.</p>
+                </section>
+                <section class="space-y-3">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-7 h-7 bg-slate-100 text-slate-900 rounded-lg flex items-center justify-center text-xs">3</span> 
+                        Bảo Mật Dữ Liệu & Mật Khẩu
+                    </h2>
+                    <p>Hệ thống của chúng tôi tích hợp các tiêu chuẩn bảo mật hiện đại (mã hóa mật khẩu, xác thực Supabase Auth qua Email OTP). Khách hàng có trách nhiệm tự bảo vệ thông tin tài khoản của mình, không chia sẻ mật khẩu hoặc mã OTP cho bất kỳ ai dưới mọi hình thức.</p>
+                </section>
+                <section class="space-y-3">
+                    <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+                        <span class="w-7 h-7 bg-slate-100 text-slate-900 rounded-lg flex items-center justify-center text-xs">4</span> 
+                        Quyền Lợi Của Khách Hàng
+                    </h2>
+                    <p>Khách hàng có quyền yêu cầu kiểm tra, cập nhật, điều chỉnh hoặc xóa bỏ thông tin cá nhân của mình bằng cách liên hệ trực tiếp với quản trị viên qua hệ thống hỗ trợ tại cửa hàng hoặc kênh trực tuyến chính thức của Nhà sách Khánh Quyên.</p>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400">
+        &copy; 2026 Nhà Sách & Văn Phòng Phẩm Khánh Quyên. Bảo lưu mọi quyền.
+    </footer>
+</body>
+</html>

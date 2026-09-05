@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Liên Hệ & Góp Ý - Nhà Sách & Văn Phòng Phẩm Khánh Quyên</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- THƯ VIỆN SUPABASE JS -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,47 +26,33 @@
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-600 selection:text-white" onclick="closeAllDropdowns(event)">
-
-    <!-- TOP MARKETING BANNER -->
-    <div class="bg-dark text-white text-xs sm:text-sm font-medium py-2.5 px-4 text-center tracking-wide relative z-50">
-        🔥 <span class="underline decoration-brand-500 font-bold">KHÁNH QYÊN MEGA SALE:</span> Nhập mã <span class="bg-brand-600 px-2 py-0.5 rounded text-white font-bold">KQ30</span> giảm 30% toàn bộ!
-    </div>
-
-    <!-- HEADER -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-4">
-            <a href="index.html" class="flex items-center gap-2 group shrink-0">
-<div class="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-slate-200 shrink-0 bg-amber-400">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-3 group shrink-0">
+    <div class="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-slate-200 shrink-0 bg-amber-400">
         <img src="khanhquyen.png" alt="Logo Khánh Quyên" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
     </div>
     <div>
         <span class="text-sm sm:text-base font-extrabold tracking-tight text-dark block leading-none">Nhà Sách & Văn Phòng Phẩm</span>
         <span class="text-[10px] text-brand-600 font-bold tracking-widest uppercase">KHÁNH QUYÊN</span>
-                </div>
-            </a>
-
+    </div>
+</a>
+<nav class="hidden md:flex items-center space-x-6 text-sm font-semibold text-slate-600 shrink-0">
             <nav class="hidden md:flex items-center space-x-6 text-sm font-semibold text-slate-600 shrink-0">
                 <a href="index.html" class="hover:text-brand-600 transition">Trang Chủ</a>
                 <a href="products.html" class="hover:text-brand-600 transition">Sản Phẩm</a>
                 <a href="contact.html" class="text-brand-600 transition">Liên Hệ</a>
             </nav>
-
-            <div class="flex items-center space-x-3 shrink-0">
-                <a href="contact.html" class="relative bg-brand-50 p-3 rounded-full text-brand-600 transition" title="Liên hệ & Góp ý">
-                    <i class="fa-solid fa-headset text-base"></i>
-                </a>
-
+            <div class="flex items-center space-x-4">
                 <a href="cart.html" class="relative bg-slate-100 hover:bg-slate-200 p-3 rounded-full text-slate-700 transition">
                     <i class="fa-solid fa-bag-shopping text-base"></i>
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                 </a>
-                
-                <div id="auth-action-container" class="flex items-center gap-3"></div>
+                <div id="auth-action-container" class="relative flex items-center gap-3">
+                </div>
             </div>
         </div>
     </header>
-
-    <!-- SECTION: NỘI DUNG LIÊN HỆ & GÓP Ý -->
     <section class="py-16 bg-slate-50">
         <div class="max-w-7xl mx-auto px-6">
             <div class="text-center max-w-2xl mx-auto mb-12">
@@ -75,15 +60,12 @@
                 <h1 class="text-3xl sm:text-4xl font-extrabold text-dark mt-3 mb-3">Liên Hệ & Góp Ý Với Chúng Tôi</h1>
                 <p class="text-sm text-slate-500 leading-relaxed">Mọi thắc mắc về sản phẩm, đơn hàng hoặc ý kiến đóng góp cải thiện dịch vụ, xin vui lòng gửi trực tiếp cho Nhà sách & Văn phòng phẩm Khánh Quyên.</p>
             </div>
-
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                <!-- THÔNG TIN LIÊN HỆ & BẢN ĐỒ -->
                 <div class="bg-dark text-white rounded-3xl p-8 space-y-6 shadow-xl">
                     <div>
                         <h3 class="text-xl font-bold mb-2">Thông Tin Cửa Hàng</h3>
                         <p class="text-xs text-slate-400 leading-relaxed">Luôn sẵn sàng phục vụ và lắng nghe mọi ý kiến từ quý khách hàng.</p>
                     </div>
-
                     <div class="space-y-4 text-sm">
                         <div class="flex items-start gap-4">
                             <div class="bg-slate-800 text-brand-500 p-3 rounded-2xl shrink-0"><i class="fa-solid fa-location-dot text-base"></i></div>
@@ -92,7 +74,6 @@
                                 <span class="font-medium text-slate-200">Chợ Tân Huề Đông, 410, Phú Túc, Vĩnh Long</span>
                             </div>
                         </div>
-
                         <div class="flex items-start gap-4">
                             <div class="bg-slate-800 text-brand-500 p-3 rounded-2xl shrink-0"><i class="fa-solid fa-phone text-base"></i></div>
                             <div>
@@ -100,7 +81,6 @@
                                 <span class="font-medium text-slate-200">0978 031 871</span>
                             </div>
                         </div>
-
                         <div class="flex items-start gap-4">
                             <div class="bg-slate-800 text-brand-500 p-3 rounded-2xl shrink-0"><i class="fa-solid fa-envelope text-base"></i></div>
                             <div>
@@ -109,8 +89,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- GOOGLE MAPS EMBED -->
                     <div class="rounded-2xl overflow-hidden border border-slate-700 h-48 w-full">
                         <iframe 
                             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3929.986873531637!2d106.3615812!3d10.3124138!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310aaf692d9e152d%3A0xa27a3d774886bb30!2zTmjDoCBTw6FjaCBLaMOhgg==!5e0!3m2!1svi!2svn!4v1710000000000!5m2!1svi!2svn" 
@@ -122,17 +100,13 @@
                             referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
                     </div>
-
                     <div class="pt-4 border-t border-slate-800 flex justify-between items-center text-xs">
                         <span class="font-bold text-slate-400 uppercase">Giờ mở cửa</span>
                         <span class="text-slate-300 font-medium">07:00 - 20:30 (Thứ 2 - CN)</span>
                     </div>
                 </div>
-
-                <!-- FORM GỬI GÓP Ý -->
                 <div class="lg:col-span-2 bg-white rounded-3xl p-8 sm:p-10 border border-slate-200 shadow-sm">
                     <h3 class="text-xl font-extrabold text-dark mb-6">Gửi Tin Nhắn Góp Ý</h3>
-                    
                     <form onsubmit="handleContactSubmit(event)" class="space-y-6">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             <div>
@@ -144,8 +118,6 @@
                                 <input type="text" id="contact-info" placeholder="Nhập SĐT hoặc Email liên lạc..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
                             </div>
                         </div>
-
-                        <!-- CUSTOM DROPDOWN CHỦ ĐỀ GÓP Ý -->
                         <div>
                             <label class="block text-xs font-bold text-slate-600 mb-2 uppercase">Chủ đề góp ý</label>
                             <div class="relative w-full" onclick="event.stopPropagation()">
@@ -154,7 +126,6 @@
                                     <span id="contact-subject-label">Chất lượng sản phẩm</span>
                                     <i id="contact-arrow" class="fa-solid fa-chevron-down text-xs text-slate-500 transition-transform duration-200"></i>
                                 </button>
-                                
                                 <div id="contact-dropdown-menu" class="absolute left-0 mt-2 w-full bg-white border border-slate-200 rounded-2xl shadow-xl hidden z-50 overflow-hidden py-1.5">
                                     <div onclick="selectContactOption('Chất lượng sản phẩm', 'Chất lượng sản phẩm')" class="px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-brand-50 hover:text-brand-600 cursor-pointer transition flex items-center justify-between bg-brand-50 text-brand-600">
                                         <span>Chất lượng sản phẩm</span>
@@ -175,12 +146,10 @@
                                 </div>
                             </div>
                         </div>
-
                         <div>
                             <label class="block text-xs font-bold text-slate-600 mb-2 uppercase">Nội dung chi tiết</label>
                             <textarea id="contact-message" rows="5" placeholder="Nhập chi tiết ý kiến đóng góp hoặc thắc mắc của bạn ở đây..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition"></textarea>
                         </div>
-
                         <button type="submit" id="submit-btn" class="bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 px-8 rounded-xl shadow-lg shadow-brand-600/30 transition text-sm flex items-center justify-center gap-2">
                             <i class="fa-solid fa-paper-plane"></i> Gửi Góp Ý Ngay
                         </button>
@@ -189,11 +158,8 @@
             </div>
         </div>
     </section>
-
-<!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-sm">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
-            <!-- Cột 1: Thông tin thương hiệu -->
             <div class="md:col-span-5 space-y-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl overflow-hidden bg-amber-400 flex items-center justify-center shrink-0">
@@ -209,8 +175,6 @@
                     <p><i class="fa-solid fa-phone text-brand-500 w-5"></i> 0978 031 871</p>
                 </div>
             </div>
-
-            <!-- Cột 2: Liên kết nhanh -->
             <div class="md:col-span-3 space-y-3">
                 <h4 class="text-white font-bold text-xs uppercase tracking-wider">Khám Phá</h4>
                 <ul class="space-y-2 text-xs">
@@ -219,8 +183,6 @@
                     <li><a href="contact.html" class="hover:text-white transition">Liên Hệ Trực Tuyến</a></li>
                 </ul>
             </div>
-
-            <!-- Cột 3: Hỗ trợ khách hàng -->
             <div class="md:col-span-4 space-y-3">
                 <h4 class="text-white font-bold text-xs uppercase tracking-wider">Hỗ Trợ Khách Hàng</h4>
                 <p class="text-xs text-slate-400">Nhận thông tin các chương trình khuyến mãi và mã giảm giá mới nhất từ cửa hàng.</p>
@@ -230,10 +192,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Dòng bản quyền phía dưới -->
         <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-<!-- Dòng bản quyền phía dưới -->
         <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <p>&copy; 2026 Nhà Sách & Văn Phòng Phẩm Khánh Quyên. All rights reserved.</p>
             <div class="flex items-center space-x-4">
@@ -242,22 +201,17 @@
         </div>
         </div>
     </footer>
-
     <script>
 const supabaseUrl = 'https://dngnkhzliwsdmytrvoae.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuZ25raHpsaXdzZG15dHJ2b2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MDkyMjcsImV4cCI6MjEwMzk4NTIyN30.fqZuesECwMbvbcnc4XSyGZZrPxTG5YbrPk1MlNHZB58'
 window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-        // --- XỬ LÝ CUSTOM DROPDOWN CHỦ ĐỀ ---
         function toggleContactDropdown(event) {
             const menu = document.getElementById('contact-dropdown-menu');
             const arrow = document.getElementById('contact-arrow');
             menu.classList.toggle('hidden');
             arrow.classList.toggle('rotate-180');
         }
-
         function closeAllDropdowns(event) {
             const menu = document.getElementById('contact-dropdown-menu');
             const arrow = document.getElementById('contact-arrow');
@@ -266,11 +220,9 @@ window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                 if (arrow) arrow.classList.remove('rotate-180');
             }
         }
-
         function selectContactOption(value, label) {
             document.getElementById('contact-subject-value').value = value;
             document.getElementById('contact-subject-label').innerText = label;
-            
             document.querySelectorAll('#contact-dropdown-menu > div').forEach(el => {
                 const checkIcon = el.querySelector('.contact-check');
                 if (el.textContent.trim().includes(label)) {
@@ -281,23 +233,17 @@ window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                     el.classList.remove('bg-brand-50', 'text-brand-600');
                 }
             });
-
             closeAllDropdowns();
         }
-
-        // --- GỬI DỮ LIỆU LÊN SUPABASE ---
         async function handleContactSubmit(e) {
             e.preventDefault();
-            
             const submitBtn = document.getElementById('submit-btn');
             const name = document.getElementById('contact-name').value.trim();
             const contactInfo = document.getElementById('contact-info').value.trim();
             const subject = document.getElementById('contact-subject-value').value;
             const message = document.getElementById('contact-message').value.trim();
-
             submitBtn.disabled = true;
             submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Đang gửi...`;
-
             try {
                 const { data, error } = await supabaseClient
                     .from('contacts')
@@ -309,13 +255,10 @@ window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                             message: message
                         }
                     ]);
-
                 if (error) throw error;
-
                 showCustomAlert("Thông báo", `Cảm ơn bạn ${name}! Ý kiến đóng góp về chủ đề "${subject}" đã được lưu thành công vào cơ sở dữ liệu.`, "info");
                 e.target.reset();
                 selectContactOption('Chất lượng sản phẩm', 'Chất lượng sản phẩm');
-
             } catch (err) {
                 console.error('Lỗi khi gửi lên Supabase:', err.message);
                 alert('Có lỗi xảy ra khi gửi góp ý: ' + err.message);
@@ -324,13 +267,11 @@ window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                 submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Gửi Góp Ý Ngay`;
             }
         }
-
         function updateCartBadge() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
             document.getElementById('cart-count').innerText = totalCount;
         }
-
         function updateHeaderAuth() {
             const container = document.getElementById('auth-action-container');
             if (currentUser) {
@@ -351,20 +292,78 @@ window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
                 `;
             }
         }
-
         function handleLogout() {
             localStorage.removeItem('currentUser');
             showCustomAlert("Thông báo", 'Đã đăng xuất tài khoản thành công!', "info");
             window.location.reload();
         }
-
         updateCartBadge();
         updateHeaderAuth();
-        // Thêm hàm này vào file contact.html để fix lỗi showCustomAlert
 function showCustomAlert(title, message, type = "info") {
     alert(`${title}\n\n${message}`);
 }
     </script>
-    
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+</script>
+<div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            function highlightNav(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.remove('text-slate-700', 'font-medium');
+                    el.classList.add('text-brand-600', 'font-bold');
+                }
+            }
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index") || currentPage === "") highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("contact")) highlightNav("nav-contact");
+            const authSlot = document.getElementById('nav-auth-slot');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (authSlot) {
+                if (currentUser) {
+                    const fullName = currentUser.full_name || currentUser.fullName || "Tài khoản";
+                    const shortName = fullName.split(" ").pop() || "Cá nhân";
+                    const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                    authSlot.innerHTML = `
+                        <a href="profile.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <img src="${avatar}" class="w-5 h-5 rounded-full object-cover mb-1 border border-white/60 shadow-sm">
+                            <span class="max-w-[50px] truncate">${shortName}</span>
+                        </a>
+                    `;
+                    if (currentPage.includes("profile")) highlightNav("nav-auth");
+                } else {
+                    authSlot.innerHTML = `
+                        <a href="login.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <i class="fa-solid fa-right-to-bracket text-base mb-1"></i> Đăng Nhập
+                        </a>
+                    `;
+                    if (currentPage.includes("login") || currentPage.includes("register")) highlightNav("nav-auth");
+                }
+            }
+        });
+</script>
 </body>
 </html>

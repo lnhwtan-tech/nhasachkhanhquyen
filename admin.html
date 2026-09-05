@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Trị Admin - Nhà Sách Khánh Quyên</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Thêm thư viện Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Thêm thư viện Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -37,8 +35,6 @@
             window.location.href = 'login.html';
         }
     </script>
-
-    <!-- Header -->
     <header class="bg-slate-900 text-white py-4 px-6 flex justify-between items-center shadow-md">
         <div class="flex items-center space-x-3">
             <div class="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-slate-200 shrink-0 bg-amber-400">
@@ -51,11 +47,7 @@
             <button onclick="localStorage.removeItem('currentUser'); window.location.href='login.html';" class="bg-brand-600 hover:bg-brand-700 px-4 py-2 rounded-xl text-xs font-bold transition">Đăng Xuất</button>
         </div>
     </header>
-
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-6 py-10 space-y-12">
-        
-        <!-- THỐNG KÊ TỔNG QUAN (WIDGET THẺ SỐ LIỆU) -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center space-x-4">
                 <div class="w-12 h-12 bg-red-50 text-brand-600 rounded-2xl flex items-center justify-center text-xl font-bold">
@@ -75,13 +67,18 @@
                     <h3 id="statOrders" class="text-xl font-extrabold text-slate-900 mt-0.5">0</h3>
                 </div>
             </div>
-            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center space-x-4">
+            <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center space-x-4 relative">
                 <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center text-xl font-bold">
                     <i class="fa-solid fa-boxes-stacked"></i>
                 </div>
                 <div>
                     <p class="text-xs text-slate-400 uppercase font-bold tracking-wider">Sản Phẩm Trong Kho</p>
                     <h3 id="statProducts" class="text-xl font-extrabold text-slate-900 mt-0.5">0</h3>
+                </div>
+                <div id="lowStockBadgeContainer" class="absolute top-4 right-4 hidden">
+                    <span onclick="filterLowStockProducts()" class="bg-red-600 text-white text-[10px] font-extrabold px-2.5 py-1 rounded-full animate-pulse cursor-pointer shadow-md hover:bg-red-700 transition flex items-center gap-1" title="Bấm để lọc các sản phẩm sắp hết hàng">
+                        <i class="fa-solid fa-triangle-exclamation"></i> <span id="lowStockCount">0</span> sắp hết
+                    </span>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex items-center space-x-4">
@@ -94,8 +91,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- PHẦN 0: THỐNG KÊ DOANH THU BIỂU ĐỒ TRỰC QUAN (DASHBOARD ANALYTICS) -->
         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
             <div class="flex justify-between items-center mb-4">
                 <div>
@@ -107,21 +102,23 @@
                 <canvas id="revenueChart"></canvas>
             </div>
         </div>
-
-        <!-- PHẦN 1: QUẢN LÝ ĐƠN HÀNG KHÁCH ĐẶT (SUPABASE) -->
         <div>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div>
                     <h1 class="text-2xl font-extrabold text-slate-900"><i class="fa-solid fa-clipboard-list text-brand-600 mr-2"></i> Danh Sách Đơn Hàng Giữ Chỗ</h1>
                     <p class="text-sm text-slate-500 mt-1">Quản lý các đơn đặt hàng trực tuyến từ khách hàng đổ về từ Supabase.</p>
                 </div>
-                <button onclick="fetchOrders()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
-                    <i class="fa-solid fa-rotate-right"></i>
-                    <span>Làm mới đơn</span>
-                </button>
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="exportOrdersToExcel()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span>Xuất Excel Đơn Hàng</span>
+                    </button>
+                    <button onclick="fetchOrders()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Làm mới đơn</span>
+                    </button>
+                </div>
             </div>
-
-            <!-- Bộ lọc và tìm kiếm đơn hàng -->
             <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4 flex flex-wrap gap-4 items-center justify-between">
                 <div class="flex-1 min-w-[240px]">
                     <div class="relative">
@@ -130,7 +127,6 @@
                     </div>
                 </div>
                 <div class="flex flex-wrap gap-3 items-center">
-                    <!-- Custom Dropdown: Lọc trạng thái đơn hàng -->
                     <div class="relative inline-block text-left" id="customDropdown-orderStatusFilter">
                         <input type="hidden" id="orderStatusFilter" value="" onchange="filterOrders()">
                         <button type="button" onclick="toggleCustomDropdown('orderStatusFilter', event)" class="bg-slate-50 border border-slate-200 hover:bg-slate-100 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-700 flex items-center justify-between min-w-[190px] focus:outline-none focus:border-brand-600 transition">
@@ -148,8 +144,6 @@
                     <input type="date" id="orderDateFilter" onchange="filterOrders()" class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600 font-medium">
                 </div>
             </div>
-
-            <!-- Bảng danh sách đơn hàng -->
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -170,8 +164,43 @@
                 </div>
             </div>
         </div>
-
-        <!-- PHẦN 2: QUẢN LÝ LIÊN HỆ & GÓP Ý (SUPABASE) -->
+        <div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900"><i class="fa-solid fa-ticket text-brand-600 mr-2"></i> Quản Lý Mã Giảm Giá</h2>
+                    <p class="text-sm text-slate-500 mt-1">Thêm, sửa, xóa và cấu hình các mã giảm giá áp dụng cho giỏ hàng.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="openAddCouponModal()" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-brand-600/30 transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                        <span>Thêm Mã Giảm Giá Mới</span>
+                    </button>
+                    <button onclick="fetchCoupons()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Làm mới</span>
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 text-xs uppercase text-slate-600 font-bold">
+                                <th class="p-4 pl-6">Mã giảm giá</th>
+                                <th class="p-4">Kiểu giảm & Giá trị</th>
+                                <th class="p-4">Đơn tối thiểu</th>
+                                <th class="p-4">Đã dùng / Giới hạn</th>
+                                <th class="p-4">Ngày hết hạn</th>
+                                <th class="p-4 text-center">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="couponsTableBody" class="divide-y divide-slate-100 text-sm">
+                            <tr><td colspan="6" class="p-6 text-center text-slate-400">Đang tải danh sách mã giảm giá...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
         <div>
             <div class="flex justify-between items-center mb-6">
                 <div>
@@ -183,8 +212,6 @@
                     <span>Làm mới góp ý</span>
                 </button>
             </div>
-
-            <!-- Bảng danh sách liên hệ -->
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -205,8 +232,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- PHẦN 3: QUẢN LÝ TÀI KHOẢN KHÁCH HÀNG / NHÂN VIÊN -->
         <div>
             <div class="flex justify-between items-center mb-6">
                 <div>
@@ -218,7 +243,6 @@
                     <span>Làm mới tài khoản</span>
                 </button>
             </div>
-
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -226,7 +250,7 @@
                             <tr class="bg-slate-100 border-b border-slate-200 text-xs uppercase text-slate-600 font-bold">
                                 <th class="p-4 pl-6">Họ tên / Email</th>
                                 <th class="p-4">Số điện thoại</th>
-                                <th class="p-4">Quyền hạn (Role)</th>
+                                <th class="p-4">Chức vụ</th>
                                 <th class="p-4 text-center">Thao tác phân quyền / Khóa</th>
                             </tr>
                         </thead>
@@ -237,29 +261,64 @@
                 </div>
             </div>
         </div>
-
-        <!-- PHẦN 4: QUẢN LÝ SẢN PHẨM -->
+        <div>
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-extrabold text-slate-900"><i class="fa-solid fa-clock-rotate-left text-brand-600 mr-2"></i> Nhật Ký Hoạt Động Hệ Thống (Audit Trail)</h2>
+                    <p class="text-sm text-slate-500 mt-1">Kiểm soát lịch sử thao tác của nhân viên và quản trị viên trong trang Admin.</p>
+                </div>
+                <button onclick="fetchActivityLogs()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span>Làm mới nhật ký</span>
+                </button>
+            </div>
+            <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 text-xs uppercase text-slate-600 font-bold">
+                                <th class="p-4 pl-6">Thời gian</th>
+                                <th class="p-4">Nhân viên / Người thực hiện</th>
+                                <th class="p-4">Hành động chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activityLogsTableBody" class="divide-y divide-slate-100 text-sm">
+                            <tr><td colspan="3" class="p-6 text-center text-slate-400">Đang tải nhật ký hoạt động...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
         <div>
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
                 <div>
-                    <h2 class="text-2xl font-extrabold text-slate-900">Quản Lý Sản Phẩm</h2>
+                    <h2 class="text-2xl font-extrabold text-slate-900"><i class="fa-solid fa-book text-brand-600 mr-2"></i> Quản Lý Sản Phẩm</h2>
                     <p class="text-sm text-slate-500 mt-1">Thêm, chỉnh sửa hoặc xóa sản phẩm sách và văn phòng phẩm trên hệ thống.</p>
                 </div>
-                <button onclick="openAddModal()" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-brand-600/30 transition flex items-center space-x-2">
-                    <i class="fa-solid fa-plus text-sm"></i>
-                    <span>Thêm Sản Phẩm Mới</span>
-                </button>
-            </div>
-
-            <!-- Tìm kiếm sản phẩm -->
-            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4">
-                <div class="relative">
-                    <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
-                    <input type="text" id="productSearchInput" oninput="filterProducts()" placeholder="Tìm kiếm tên sản phẩm hoặc danh mục..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
+                <div class="flex items-center gap-3">
+                    <button onclick="fetchProducts()" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center space-x-2 shadow">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span>Làm mới</span>
+                    </button>
+                    <button onclick="openAddModal()" class="bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-xs font-bold shadow-lg shadow-brand-600/30 transition flex items-center space-x-2">
+                        <i class="fa-solid fa-plus text-sm"></i>
+                        <span>Thêm Sản Phẩm Mới</span>
+                    </button>
                 </div>
             </div>
-
-            <!-- Bảng danh sách sản phẩm -->
+            <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm mb-4 flex flex-wrap gap-4 items-center justify-between">
+                <div class="flex-1 min-w-[240px]">
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-3.5 text-slate-400 text-sm"></i>
+                        <input type="text" id="productSearchInput" oninput="filterProducts()" placeholder="Tìm kiếm tên sản phẩm hoặc danh mục..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-600">
+                    </div>
+                </div>
+                <div>
+                    <button onclick="filterLowStockProducts()" class="bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-4 py-2.5 rounded-xl text-xs font-bold transition flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Lọc tồn kho thấp (< 5)
+                    </button>
+                </div>
+            </div>
             <div class="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
                 <table class="w-full text-left border-collapse">
                     <thead>
@@ -268,18 +327,16 @@
                             <th class="p-4">Tên sản phẩm</th>
                             <th class="p-4">Danh mục</th>
                             <th class="p-4">Giá bán</th>
+                            <th class="p-4">Tồn kho</th>
                             <th class="p-4 text-center">Hành động</th>
                         </tr>
                     </thead>
                     <tbody id="productTableBody" class="divide-y divide-slate-100 text-sm">
-                        <!-- Dữ liệu sản phẩm sẽ được load tự động bằng JavaScript -->
                     </tbody>
                 </table>
             </div>
         </div>
     </main>
-
-    <!-- Khung ẩn phục vụ cho tính năng in hóa đơn trực tiếp (Print Invoice) -->
     <div id="print-area" class="hidden">
         <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto;">
             <h2 style="text-align: center; margin-bottom: 5px;">NHÀ SÁCH & VĂN PHÒNG PHẨM KHÁNH QUYÊN</h2>
@@ -304,8 +361,6 @@
             <p style="text-align: center; font-style: italic; font-size: 11px; margin-top: 30px;">Cảm ơn quý khách đã ủng hộ nhà sách!</p>
         </div>
     </div>
-
-    <!-- Modal Thêm/Sửa Sản Phẩm -->
     <div id="productModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 overflow-y-auto">
         <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-lg w-full mx-4 border border-slate-200 my-8">
             <div class="flex justify-between items-center mb-6">
@@ -321,7 +376,6 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Danh mục</label>
-                        <!-- Custom Dropdown: Danh mục sản phẩm trong Modal -->
                         <div class="relative inline-block w-full text-left" id="customDropdown-modalCategory">
                             <input type="hidden" id="category" value="Sách Các Loại">
                             <button type="button" onclick="toggleCustomDropdown('modalCategory', event)" class="w-full bg-slate-100 border border-slate-200 hover:bg-slate-200/50 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 flex items-center justify-between focus:outline-none focus:border-brand-600 transition">
@@ -349,7 +403,6 @@
                     </div>
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Tình trạng</label>
-                        <!-- Custom Dropdown: Tình trạng sản phẩm trong Modal -->
                         <div class="relative inline-block w-full text-left" id="customDropdown-modalStatus">
                             <input type="hidden" id="status" value="Đang bán">
                             <button type="button" onclick="toggleCustomDropdown('modalStatus', event)" class="w-full bg-slate-100 border border-slate-200 hover:bg-slate-200/50 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 flex items-center justify-between focus:outline-none focus:border-brand-600 transition">
@@ -377,93 +430,162 @@
             </form>
         </div>
     </div>
-
-    <!-- Modal Phóng To Ảnh -->
+    <div id="couponModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4 overflow-y-auto">
+        <div class="bg-white p-8 rounded-3xl shadow-2xl max-w-lg w-full mx-4 border border-slate-200 my-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="couponModalTitle" class="text-lg font-extrabold text-slate-900">Thêm Mã Giảm Giá Mới</h3>
+                <button onclick="closeCouponModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <form id="couponForm" onsubmit="handleSaveCoupon(event)" class="space-y-4">
+                <input type="hidden" id="couponId">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Mã Giảm Giá (VD: SUMMER20)</label>
+                    <input type="text" id="couponCode" required placeholder="Nhập mã viết hoa không dấu..." class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600 uppercase font-bold">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Kiểu giảm</label>
+                        <div class="relative inline-block w-full text-left" id="customDropdown-modalDiscountType">
+                            <input type="hidden" id="modalDiscountType" value="percent">
+                            <button type="button" onclick="toggleCustomDropdown('modalDiscountType', event)" class="w-full bg-slate-100 border border-slate-200 hover:bg-slate-200/50 rounded-xl px-4 py-3 text-sm font-medium text-slate-700 flex items-center justify-between focus:outline-none focus:border-brand-600 transition">
+                                <span id="label-modalDiscountType">Phần trăm (%)</span>
+                                <i class="fa-solid fa-chevron-down text-xs text-slate-400 ml-2 transition-transform duration-200" id="icon-modalDiscountType"></i>
+                            </button>
+                            <div id="menu-modalDiscountType" class="hidden absolute left-0 mt-2 w-full bg-white border border-slate-200 rounded-2xl shadow-xl z-30 overflow-hidden py-1">
+                                <div onclick="selectCustomOption('modalDiscountType', 'percent', 'Phần trăm (%)')" class="px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer transition">Phần trăm (%)</div>
+                                <div onclick="selectCustomOption('modalDiscountType', 'fixed', 'Số tiền cố định (đ)')" class="px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 cursor-pointer transition">Số tiền cố định (đ)</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Giá trị giảm</label>
+                        <input type="number" id="couponDiscountValue" required placeholder="VD: 10 hoặc 50000" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600 font-bold text-brand-600">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Đơn tối thiểu (đ)</label>
+                        <input type="number" id="couponMinOrder" value="0" min="0" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Giới hạn số lần dùng</label>
+                        <input type="number" id="couponUsageLimit" placeholder="Để trống = Không giới hạn" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Ngày hết hạn</label>
+                    <input type="datetime-local" id="couponExpiresAt" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600 font-medium">
+                </div>
+                <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition text-sm shadow-lg shadow-brand-600/30">
+                    Lưu Mã Giảm Giá
+                </button>
+            </form>
+        </div>
+    </div>
     <div id="imageModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4" onclick="closeImageModal()">
         <div class="relative max-w-4xl max-h-[90vh]" onclick="event.stopPropagation()">
             <button onclick="closeImageModal()" class="absolute -top-10 right-0 text-white text-2xl hover:text-slate-300"><i class="fa-solid fa-xmark"></i></button>
             <img id="enlargedImg" src="" class="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl border border-slate-700 bg-white">
         </div>
     </div>
-
-    <!-- Audio thông báo realtime -->
     <audio id="notificationSound" src="https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3" preload="auto"></audio>
-
     <script>
         const supabaseUrl = 'https://dngnkhzliwsdmytrvoae.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuZ25raHpsaXdzZG15dHJ2b2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MDkyMjcsImV4cCI6MjEwMzk4NTIyN30.fqZuesECwMbvbcnc4XSyGZZrPxTG5YbrPk1MlNHZB58';
         window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
         let revenueChartInstance = null;
         let globalOrders = [];
         let globalProducts = [];
         let globalContacts = [];
-
-        // --- HỆ THỐNG CUSTOM DROPDOWN LOGIC ---
+        let globalCoupons = [];
+        let globalActivityLogs = [];
         function toggleCustomDropdown(id, event) {
             if (event) event.stopPropagation();
             const menu = document.getElementById(`menu-${id}`);
             const icon = document.getElementById(`icon-${id}`);
-            
-            // Đóng tất cả các custom dropdown khác trước
             document.querySelectorAll('[id^="menu-"]').forEach(m => {
                 if (m.id !== `menu-${id}`) m.classList.add('hidden');
             });
             document.querySelectorAll('[id^="icon-"]').forEach(i => {
                 if (i.id !== `icon-${id}`) i.classList.remove('rotate-180');
             });
-
-            menu.classList.toggle('hidden');
-            icon.classList.toggle('rotate-180');
+            if (menu) menu.classList.toggle('hidden');
+            if (icon) icon.classList.toggle('rotate-180');
         }
-
         function selectCustomOption(id, value, labelText, extraData = null) {
-            // Gán giá trị vào hidden input
             const input = document.getElementById(id);
             if (input) {
                 input.value = value;
-                // Kích hoạt sự kiện onchange tự động
                 if (typeof input.onchange === 'function') {
                     input.onchange();
                 }
             }
-
-            // Gán nhãn hiển thị lên nút dropdown
             const label = document.getElementById(`label-${id}`);
             if (label) {
                 label.innerText = labelText;
             }
-
-            // Ẩn menu dropdown sau khi chọn
             const menu = document.getElementById(`menu-${id}`);
             const icon = document.getElementById(`icon-${id}`);
             if (menu) menu.classList.add('hidden');
             if (icon) icon.classList.remove('rotate-180');
-
-            // Xử lý riêng nếu gọi từ bảng danh sách động (như Order Status hoặc User Role)
             if (extraData && typeof extraData.callback === 'function') {
                 extraData.callback(extraData.itemId, value);
             }
         }
-
-        // Đóng dropdown khi click ra ngoài vùng dropdown
         function closeAllCustomDropdowns(event) {
             if (!event.target.closest('[id^="customDropdown-"]')) {
                 document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
                 document.querySelectorAll('[id^="icon-"]').forEach(i => i.classList.remove('rotate-180'));
             }
         }
-
-
-        // --- CẬP NHẬT THỐNG KÊ TỔNG QUAN ---
+        async function logAdminActivity(actionText) {
+            try {
+                const adminName = user ? (user.full_name || user.name || user.email || 'Quản trị viên') : 'Admin';
+                await supabaseClient.from('activity_logs').insert([{
+                    user_name: adminName,
+                    action_details: actionText
+                }]);
+                fetchActivityLogs();
+            } catch (err) {
+                console.error("Lỗi ghi log hoạt động:", err);
+            }
+        }
+        async function fetchActivityLogs() {
+            try {
+                const { data: logs, error } = await supabaseClient
+                    .from('activity_logs')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+                    .limit(50);
+                if (error) throw error;
+                globalActivityLogs = logs || [];
+                const tbody = document.getElementById('activityLogsTableBody');
+                tbody.innerHTML = '';
+                if (!logs || logs.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="3" class="p-6 text-center text-slate-400">Chưa có nhật ký hoạt động nào.</td></tr>`;
+                    return;
+                }
+                logs.forEach(l => {
+                    const logDate = l.created_at ? new Date(l.created_at).toLocaleString('vi-VN') : 'Vừa xong';
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-4 pl-6 text-xs text-slate-500 font-medium">${logDate}</td>
+                            <td class="p-4 font-bold text-slate-900">${l.user_name || 'Nhân viên'}</td>
+                            <td class="p-4 text-slate-700 text-xs">${l.action_details || ''}</td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error("Lỗi tải nhật ký hoạt động:", err);
+                document.getElementById('activityLogsTableBody').innerHTML = `<tr><td colspan="3" class="p-6 text-center text-red-500 text-xs">Bảng activity_logs chưa được tạo hoặc lỗi kết nối Supabase.</td></tr>`;
+            }
+        }
         function updateDashboardStats(orders, products, contacts) {
             const now = new Date();
             const currentMonth = now.getMonth();
             const currentYear = now.getFullYear();
-
             let monthlyRevenue = 0;
             let newOrdersCount = 0;
-
             orders.forEach(o => {
                 if (o.created_at) {
                     const d = new Date(o.created_at);
@@ -475,33 +597,36 @@
                     newOrdersCount++;
                 }
             });
-
             document.getElementById('statRevenue').innerText = monthlyRevenue.toLocaleString('vi-VN') + ' đ';
             document.getElementById('statOrders').innerText = newOrdersCount;
             document.getElementById('statProducts').innerText = products.length;
             document.getElementById('statContacts').innerText = contacts.length;
+            const lowStockItems = products.filter(p => Number(p.stock !== undefined ? p.stock : 50) < 5);
+            const badgeContainer = document.getElementById('lowStockBadgeContainer');
+            const lowStockCountEl = document.getElementById('lowStockCount');
+            if (lowStockItems.length > 0) {
+                lowStockCountEl.innerText = lowStockItems.length;
+                badgeContainer.classList.remove('hidden');
+                badgeContainer.classList.add('flex');
+            } else {
+                badgeContainer.classList.remove('flex');
+                badgeContainer.classList.add('hidden');
+            }
         }
-
-        // --- 0. BIỂU ĐỒ DOANH THU (CHART.JS) ---
         async function renderRevenueChart(orders) {
             const revenueByDate = {};
             const sortedOrders = [...orders].sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-
             sortedOrders.forEach(order => {
                 if (!order.created_at) return;
                 const dateStr = new Date(order.created_at).toLocaleDateString('vi-VN');
                 revenueByDate[dateStr] = (revenueByDate[dateStr] || 0) + Number(order.total_amount || 0);
             });
-
             const labels = Object.keys(revenueByDate);
             const dataValues = Object.values(revenueByDate);
-
             const ctx = document.getElementById('revenueChart').getContext('2d');
-            
             if (revenueChartInstance) {
                 revenueChartInstance.destroy();
             }
-
             revenueChartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -535,18 +660,14 @@
                 }
             });
         }
-
-        // --- 1. QUẢN LÝ ĐƠN HÀNG (TÌM KIẾM, LỌC, ĐỔI TRẠNG THÁI) ---
         async function fetchOrders() {
             try {
                 const { data: orders, error } = await supabaseClient
                     .from('orders')
                     .select('*')
                     .order('created_at', { ascending: false });
-
                 if (error) throw error;
                 globalOrders = orders || [];
-                
                 renderRevenueChart(globalOrders);
                 updateDashboardStats(globalOrders, globalProducts, globalContacts);
                 filterOrders();
@@ -555,43 +676,33 @@
                 document.getElementById('ordersTableBody').innerHTML = `<tr><td colspan="6" class="p-6 text-center text-red-500 text-xs">Lỗi tải dữ liệu đơn hàng từ Supabase.</td></tr>`;
             }
         }
-
         function filterOrders() {
             const keyword = document.getElementById('orderSearchInput').value.toLowerCase().trim();
             const statusFilter = document.getElementById('orderStatusFilter').value;
             const dateFilter = document.getElementById('orderDateFilter').value;
-
             const filtered = globalOrders.filter(o => {
                 const customerName = (o.customer_name || '').toLowerCase();
                 const phone = (o.phone || '').toLowerCase();
                 const matchKeyword = customerName.includes(keyword) || phone.includes(keyword);
-
                 const matchStatus = !statusFilter || o.status === statusFilter;
-
                 let matchDate = true;
                 if (dateFilter && o.created_at) {
                     const orderDateStr = new Date(o.created_at).toISOString().split('T')[0];
                     matchDate = orderDateStr === dateFilter;
                 }
-
                 return matchKeyword && matchStatus && matchDate;
             });
-
             displayOrders(filtered);
         }
-
         function displayOrders(orders) {
             const tbody = document.getElementById('ordersTableBody');
             tbody.innerHTML = '';
-
             if (!orders || orders.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Không tìm thấy đơn hàng phù hợp.</td></tr>`;
                 return;
             }
-
             orders.forEach((o, index) => {
                 const orderDate = o.created_at ? new Date(o.created_at).toLocaleString('vi-VN') : 'Vừa xong';
-                
                 let itemsHtml = '';
                 if (o.items && Array.isArray(o.items)) {
                     itemsHtml = o.items.map(i => `
@@ -601,17 +712,13 @@
                         </div>
                     `).join('');
                 }
-
                 const orderJsonStr = encodeURIComponent(JSON.stringify(o));
                 const currentStatus = o.status || 'Chờ chuẩn bị';
-                
                 let badgeClass = 'bg-amber-50 text-amber-700 border-amber-200';
                 if (currentStatus === 'Đang giao / Sẵn sàng lấy') badgeClass = 'bg-blue-50 text-blue-700 border-blue-200';
                 if (currentStatus === 'Đã hoàn thành') badgeClass = 'bg-emerald-50 text-emerald-700 border-emerald-200';
                 if (currentStatus === 'Đã hủy') badgeClass = 'bg-red-50 text-red-700 border-red-200';
-
                 const dropdownId = `orderStatus-${index}`;
-
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition align-top">
                         <td class="p-4 pl-6 text-xs text-slate-500 font-medium">${orderDate}</td>
@@ -626,7 +733,6 @@
                             <p class="text-slate-500 italic">Ghi chú: ${o.note || 'Không có'}</p>
                         </td>
                         <td class="p-4 text-center space-y-2">
-                            <!-- Custom Dropdown cho Trạng thái Đơn hàng trong bảng -->
                             <div class="relative inline-block text-left" id="customDropdown-${dropdownId}">
                                 <input type="hidden" id="${dropdownId}" value="${currentStatus}">
                                 <button type="button" onclick="toggleCustomDropdown('${dropdownId}', event)" class="border rounded-xl px-3 py-1.5 text-xs font-bold ${badgeClass} flex items-center justify-between min-w-[170px] focus:outline-none transition">
@@ -653,7 +759,6 @@
                 `;
             });
         }
-
         async function updateOrderStatus(id, newStatus) {
             try {
                 const { error } = await supabaseClient.from('orders').update({ status: newStatus }).eq('id', id);
@@ -661,6 +766,7 @@
                 const item = globalOrders.find(o => o.id == id);
                 if (item) item.status = newStatus;
                 updateDashboardStats(globalOrders, globalProducts, globalContacts);
+                logAdminActivity(`Đã cập nhật trạng thái đơn hàng #${id} thành "${newStatus}"`);
                 alert('Đã cập nhật trạng thái đơn hàng thành công!');
                 filterOrders();
             } catch (err) {
@@ -668,15 +774,39 @@
                 alert('Không thể cập nhật trạng thái đơn hàng!');
             }
         }
-
+        function exportOrdersToExcel() {
+            if (!globalOrders || globalOrders.length === 0) {
+                alert('Không có dữ liệu đơn hàng để xuất!');
+                return;
+            }
+            let csvContent = "\uFEFF"; 
+            csvContent += "ID Don Hang,Thoi Gian,Khach Hang,So Dien Thoai,Tong Tien (VND),Trang Thai,Ghi Chu\n";
+            globalOrders.forEach(o => {
+                const id = o.id || '';
+                const time = o.created_at ? new Date(o.created_at).toLocaleString('vi-VN').replace(/,/g, '') : '';
+                const name = `"${(o.customer_name || 'Khách lẻ').replace(/"/g, '""')}"`;
+                const phone = `"${(o.phone || '').replace(/"/g, '""')}"`;
+                const amount = Number(o.total_amount || 0);
+                const status = `"${(o.status || 'Chờ chuẩn bị').replace(/"/g, '""')}"`;
+                const note = `"${(o.note || '').replace(/"/g, '""')}"`;
+                csvContent += `${id},${time},${name},${phone},${amount},${status},${note}\n`;
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `bao_cao_don_hang_khanhquyen_${new Date().toISOString().split('T')[0]}.csv`);
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            logAdminActivity('Đã xuất báo cáo doanh thu / danh sách đơn hàng ra file Excel (CSV)');
+        }
         function printOrderInvoice(orderJson) {
             const order = JSON.parse(decodeURIComponent(orderJson));
-            
             document.getElementById('print-customer-name').innerText = order.customer_name || 'Khách lẻ';
             document.getElementById('print-customer-phone').innerText = order.phone || 'Không có';
             document.getElementById('print-customer-address').innerText = (order.note ? order.note : 'Không có ghi chú') + (order.pickup_time ? ` (Hẹn: ${order.pickup_time})` : '');
             document.getElementById('print-total').innerText = Number(order.total_amount || 0).toLocaleString('vi-VN');
-
             const items = Array.isArray(order.items) ? order.items : [];
             const itemsBody = document.getElementById('print-items-body');
             itemsBody.innerHTML = items.map(item => `
@@ -686,15 +816,14 @@
                     <td style="text-align: right; padding: 5px; border-bottom: 1px solid #eee;">${Number((item.price || 0) * item.quantity).toLocaleString('vi-VN')} đ</td>
                 </tr>
             `).join('');
-
             window.print();
         }
-
         async function deleteOrder(id) {
             if (!confirm('Bạn có chắc chắn muốn xóa đơn hàng này không?')) return;
             try {
                 const { error } = await supabaseClient.from('orders').delete().eq('id', id);
                 if (error) throw error;
+                logAdminActivity(`Đã xóa đơn hàng #${id}`);
                 alert('Đã xóa đơn hàng thành công!');
                 fetchOrders();
             } catch (err) {
@@ -702,28 +831,140 @@
                 alert('Không thể xóa đơn hàng!');
             }
         }
-
-
-        // --- 2. QUẢN LÝ LIÊN HỆ & GÓP Ý ---
+        async function fetchCoupons() {
+            try {
+                const { data: coupons, error } = await supabaseClient
+                    .from('coupons')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (error) throw error;
+                globalCoupons = coupons || [];
+                const tbody = document.getElementById('couponsTableBody');
+                tbody.innerHTML = '';
+                if (!coupons || coupons.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Chưa có mã giảm giá nào được tạo.</td></tr>`;
+                    return;
+                }
+                coupons.forEach(c => {
+                    const cJson = encodeURIComponent(JSON.stringify(c));
+                    const discountDisplay = c.discount_type === 'percent' ? `${c.discount_value}%` : `${Number(c.discount_value).toLocaleString('vi-VN')}đ`;
+                    const expiresDisplay = c.expires_at ? new Date(c.expires_at).toLocaleString('vi-VN') : 'Không thời hạn';
+                    const usageDisplay = `${c.used_count || 0} / ${c.usage_limit !== null && c.usage_limit !== undefined ? c.usage_limit : '∞'}`;
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-4 pl-6 font-extrabold text-brand-600">${c.code}</td>
+                            <td class="p-4"><span class="bg-slate-100 text-slate-800 px-3 py-1 rounded-full text-xs font-bold">${discountDisplay}</span></td>
+                            <td class="p-4 font-semibold text-slate-700">${Number(c.min_order_value || 0).toLocaleString('vi-VN')}đ</td>
+                            <td class="p-4 text-xs font-bold text-slate-600">${usageDisplay}</td>
+                            <td class="p-4 text-xs text-slate-500">${expiresDisplay}</td>
+                            <td class="p-4 text-center space-x-2">
+                                <button onclick="openEditCouponModal('${cJson}')" class="bg-amber-50 hover:bg-amber-100 text-amber-600 px-3 py-2 rounded-xl text-xs font-bold transition"><i class="fa-solid fa-pen-to-square mr-1"></i> Sửa</button>
+<button onclick="deleteCoupon('${c.id}', '${c.code}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-xl text-xs font-bold transition"><i class="fa-solid fa-trash mr-1"></i> Xóa</button>                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                console.error("Lỗi tải coupons:", err);
+                document.getElementById('couponsTableBody').innerHTML = `<tr><td colspan="6" class="p-6 text-center text-red-500 text-xs">Bảng coupons chưa được tạo trên Supabase.</td></tr>`;
+            }
+        }
+        let isEditingCoupon = false;
+function openAddCouponModal() {
+    isEditingCoupon = false;
+    document.getElementById('couponModalTitle').innerText = 'Thêm Mã Giảm Giá Mới';
+    document.getElementById('couponForm').reset();
+    document.getElementById('couponId').value = '';
+    const defaultType = 'percent'; 
+    selectCustomOption('modalDiscountType', defaultType, defaultType === 'percent' ? 'Phần trăm (%)' : 'Số tiền cố định (đ)');
+    document.getElementById('couponModal').classList.remove('hidden');
+    document.getElementById('couponModal').classList.add('flex');
+}
+        function openEditCouponModal(cJson) {
+            isEditingCoupon = true;
+            const c = JSON.parse(decodeURIComponent(cJson));
+            document.getElementById('couponModalTitle').innerText = 'Chỉnh Sửa Mã Giảm Giá';
+            document.getElementById('couponId').value = c.id;
+            document.getElementById('couponCode').value = c.code;
+            const dtype = c.discount_type || 'percent';
+            selectCustomOption('modalDiscountType', dtype, dtype === 'percent' ? 'Phần trăm (%)' : 'Số tiền cố định (đ)');
+            document.getElementById('couponDiscountValue').value = c.discount_value;
+            document.getElementById('couponMinOrder').value = c.min_order_value || 0;
+            document.getElementById('couponUsageLimit').value = c.usage_limit !== null ? c.usage_limit : '';
+            if (c.expires_at) {
+                document.getElementById('couponExpiresAt').value = c.expires_at.slice(0, 16);
+            } else {
+                document.getElementById('couponExpiresAt').value = '';
+            }
+            document.getElementById('couponModal').classList.remove('hidden');
+            document.getElementById('couponModal').classList.add('flex');
+        }
+        function closeCouponModal() {
+            document.getElementById('couponModal').classList.remove('flex');
+            document.getElementById('couponModal').classList.add('hidden');
+        }
+async function handleSaveCoupon(e) {
+    e.preventDefault();
+    const id = document.getElementById('couponId').value;
+    const code = document.getElementById('couponCode').value.trim().toUpperCase();
+    let discount_type = 'percent';
+    const possibleEl = document.getElementById('modalDiscountType');
+    if (possibleEl && possibleEl.value) {
+        discount_type = possibleEl.value;
+    }
+    const discount_value = Number(document.getElementById('couponDiscountValue').value);
+    const min_order_value = Number(document.getElementById('couponMinOrder').value) || 0;
+    const usageLimitVal = document.getElementById('couponUsageLimit').value.trim();
+    const usage_limit = usageLimitVal === '' ? null : Number(usageLimitVal);
+    const expiresVal = document.getElementById('couponExpiresAt').value;
+    const expires_at = expiresVal ? new Date(expiresVal).toISOString() : null;
+    const couponData = { code, discount_type, discount_value, min_order_value, usage_limit, expires_at };
+    try {
+        let error;
+        if (isEditingCoupon && id) {
+            const res = await supabaseClient.from('coupons').update(couponData).eq('id', id);
+            error = res.error;
+        } else {
+            const res = await supabaseClient.from('coupons').insert([couponData]);
+            error = res.error;
+        }
+        if (error) throw error;
+        logAdminActivity(isEditingCoupon ? `Đã cập nhật mã giảm giá "${code}"` : `Đã tạo mới mã giảm giá "${code}"`);
+        alert(isEditingCoupon ? 'Cập nhật mã giảm giá thành công!' : 'Thêm mã giảm giá thành công!');
+        closeCouponModal();
+        fetchCoupons();
+    } catch (err) {
+        console.error("Lỗi lưu coupon chi tiết:", err);
+        alert('Có lỗi khi lưu mã giảm giá: ' + (err.message || JSON.stringify(err)));
+    }
+}
+async function deleteCoupon(id, code) {
+    if (!confirm(`Bạn có chắc chắn muốn xóa mã giảm giá "${code || id}" không?`)) return;
+    try {
+        const { error } = await supabaseClient.from('coupons').delete().eq('id', id);
+        if (error) throw error;
+        logAdminActivity(`Đã xóa mã giảm giá "${code || id}"`);
+        alert('Đã xóa mã giảm giá thành công!');
+        fetchCoupons();
+    } catch (err) {
+        console.error(err);
+        alert('Không thể xóa mã giảm giá!');
+    }
+}
         async function fetchContacts() {
             try {
                 const { data: contacts, error } = await supabaseClient
                     .from('contacts')
                     .select('*')
                     .order('created_at', { ascending: false });
-
                 if (error) throw error;
                 globalContacts = contacts || [];
                 updateDashboardStats(globalOrders, globalProducts, globalContacts);
-
                 const tbody = document.getElementById('contactsTableBody');
                 tbody.innerHTML = '';
-
                 if (!contacts || contacts.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Chưa có ý kiến góp ý nào được gửi.</td></tr>`;
                     return;
                 }
-
                 contacts.forEach(c => {
                     const contactDate = c.created_at ? new Date(c.created_at).toLocaleString('vi-VN') : 'Vừa xong';
                     tbody.innerHTML += `
@@ -746,12 +987,12 @@
                 document.getElementById('contactsTableBody').innerHTML = `<tr><td colspan="6" class="p-6 text-center text-red-500 text-xs">Lỗi tải dữ liệu góp ý từ Supabase.</td></tr>`;
             }
         }
-
         async function deleteContact(id) {
             if (!confirm('Bạn có chắc chắn muốn xóa ý kiến góp ý này không?')) return;
             try {
                 const { error } = await supabaseClient.from('contacts').delete().eq('id', id);
                 if (error) throw error;
+                logAdminActivity(`Đã xóa ý kiến góp ý #${id}`);
                 alert('Đã xóa góp ý thành công!');
                 fetchContacts();
             } catch (err) {
@@ -759,35 +1000,25 @@
                 alert('Không thể xóa góp ý!');
             }
         }
-
-
-        // --- 3. QUẢN LÝ TÀI KHOẢN HỆ THỐNG ---
         async function fetchUsers() {
             try {
                 const { data: users, error } = await supabaseClient
                     .from('users')
                     .select('*');
-
                 const tbody = document.getElementById('usersTableBody');
                 tbody.innerHTML = '';
-
                 if (error) throw error;
-
                 if (!users || users.length === 0) {
                     tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400">Chưa có tài khoản nào trên hệ thống (hoặc bảng users chưa được tạo).</td></tr>`;
                     return;
                 }
-
                 users.forEach((u, index) => {
                     const currentRole = u.role || 'customer';
-                    
                     let roleLabel = 'Khách hàng (Customer)';
                     if (currentRole === 'staff') roleLabel = 'Nhân viên (Staff)';
                     if (currentRole === 'admin') roleLabel = 'Quản trị (Admin)';
                     if (currentRole === 'blocked') roleLabel = 'Khóa tài khoản';
-
                     const dropdownId = `userRole-${index}`;
-
                     tbody.innerHTML += `
                         <tr class="hover:bg-slate-50 transition">
                             <td class="p-4 pl-6">
@@ -796,7 +1027,6 @@
                             </td>
                             <td class="p-4 font-semibold text-slate-700">${u.phone || 'Không có'}</td>
                             <td class="p-4">
-                                <!-- Custom Dropdown cho Phân quyền Tài khoản -->
                                 <div class="relative inline-block text-left" id="customDropdown-${dropdownId}">
                                     <input type="hidden" id="${dropdownId}" value="${currentRole}">
                                     <button type="button" onclick="toggleCustomDropdown('${dropdownId}', event)" class="bg-white border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-700 flex items-center justify-between min-w-[180px] focus:outline-none transition">
@@ -824,11 +1054,11 @@
                 document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 text-xs">Bảng quản lý người dùng chưa sẵn sàng trên Supabase hoặc chưa có dữ liệu.</td></tr>`;
             }
         }
-
         async function updateUserRole(id, newRole) {
             try {
                 const { error } = await supabaseClient.from('users').update({ role: newRole }).eq('id', id);
                 if (error) throw error;
+                logAdminActivity(`Đã thay đổi phân quyền tài khoản #${id} thành "${newRole}"`);
                 alert('Cập nhật quyền tài khoản thành công!');
                 fetchUsers();
             } catch (err) {
@@ -836,12 +1066,12 @@
                 alert('Không thể cập nhật quyền tài khoản!');
             }
         }
-
         async function deleteUser(id) {
             if (!confirm('Bạn có chắc chắn muốn xóa tài khoản này?')) return;
             try {
                 const { error } = await supabaseClient.from('users').delete().eq('id', id);
                 if (error) throw error;
+                logAdminActivity(`Đã xóa tài khoản #${id}`);
                 alert('Đã xóa tài khoản thành công!');
                 fetchUsers();
             } catch (err) {
@@ -849,28 +1079,22 @@
                 alert('Không thể xóa tài khoản!');
             }
         }
-
-
-        // --- 4. QUẢN LÝ SẢN PHẨM & TÌM KIẾM ---
         let isEditing = false;
-
         async function fetchProducts() {
             try {
                 const { data: products, error } = await supabaseClient
                     .from('products')
                     .select('*')
                     .order('id', { ascending: false });
-
                 if (error) throw error;
                 globalProducts = products || [];
                 updateDashboardStats(globalOrders, globalProducts, globalContacts);
                 filterProducts();
             } catch (err) {
                 console.error("Lỗi khi tải sản phẩm từ Supabase:", err);
-                document.getElementById('productTableBody').innerHTML = `<tr><td colspan="5" class="p-6 text-center text-red-500 text-xs">Lỗi tải dữ liệu sản phẩm từ Supabase.</td></tr>`;
+                document.getElementById('productTableBody').innerHTML = `<tr><td colspan="6" class="p-6 text-center text-red-500 text-xs">Lỗi tải dữ liệu sản phẩm từ Supabase.</td></tr>`;
             }
         }
-
         function filterProducts() {
             const keyword = document.getElementById('productSearchInput').value.toLowerCase().trim();
             const filtered = globalProducts.filter(p => {
@@ -880,19 +1104,26 @@
             });
             displayProducts(filtered);
         }
-
+        function filterLowStockProducts() {
+            const filtered = globalProducts.filter(p => Number(p.stock !== undefined ? p.stock : 50) < 5);
+            displayProducts(filtered);
+            document.getElementById('productSearchInput').value = '';
+        }
         function displayProducts(products) {
             const tbody = document.getElementById('productTableBody');
             tbody.innerHTML = '';
-
             if (!products || products.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Không tìm thấy sản phẩm phù hợp.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Không tìm thấy sản phẩm phù hợp.</td></tr>`;
                 return;
             }
-
             products.forEach(p => {
                 const pJson = encodeURIComponent(JSON.stringify(p));
                 const imgUrl = p.image || 'https://via.placeholder.com/150';
+                const stockVal = p.stock !== undefined ? p.stock : 50;
+                let stockBadge = `<span class="bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold">${stockVal}</span>`;
+                if (stockVal < 5) {
+                    stockBadge = `<span class="bg-red-50 text-red-700 border border-red-200 px-3 py-1 rounded-full text-xs font-extrabold animate-pulse"><i class="fa-solid fa-triangle-exclamation mr-1"></i> ${stockVal} (Sắp hết!)</span>`;
+                }
                 tbody.innerHTML += `
                     <tr class="hover:bg-slate-50 transition">
                         <td class="p-4 pl-6">
@@ -908,6 +1139,7 @@
                         </td>
                         <td class="p-4"><span class="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-xs font-bold">${p.category}</span></td>
                         <td class="p-4 text-brand-600 font-extrabold">${Number(p.price || 0).toLocaleString('vi-VN')}đ</td>
+                        <td class="p-4">${stockBadge}</td>
                         <td class="p-4 text-center space-x-2">
                             <button onclick="openEditModal('${pJson}')" class="bg-amber-50 hover:bg-amber-100 text-amber-600 px-3 py-2 rounded-xl text-xs font-bold transition"><i class="fa-solid fa-pen-to-square mr-1"></i> Sửa</button>
                             <button onclick="deleteProduct('${p.id}')" class="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-2 rounded-xl text-xs font-bold transition"><i class="fa-solid fa-trash mr-1"></i> Xóa</button>
@@ -916,62 +1148,47 @@
                 `;
             });
         }
-
         function openAddModal() {
             isEditing = false;
             document.getElementById('modalTitle').innerText = 'Thêm Sản Phẩm Mới';
             document.getElementById('productForm').reset();
             document.getElementById('productId').value = '';
             document.getElementById('stock').value = '50';
-            
-            // Đặt lại giá trị mặc định cho custom dropdown trong modal
             selectCustomOption('modalCategory', 'Sách Các Loại', 'Sách Các Loại');
             selectCustomOption('modalStatus', 'Đang bán', 'Đang bán');
-
             document.getElementById('productModal').classList.remove('hidden');
             document.getElementById('productModal').classList.add('flex');
         }
-
         function openEditModal(pJson) {
             isEditing = true;
             const p = JSON.parse(decodeURIComponent(pJson));
             document.getElementById('modalTitle').innerText = 'Chỉnh Sửa Sản Phẩm';
             document.getElementById('productId').value = p.id;
             document.getElementById('name').value = p.name;
-            
-            // Gán giá trị vào custom dropdown trong modal
             const cat = p.category || 'Sách Các Loại';
             selectCustomOption('modalCategory', cat, cat);
-            
             document.getElementById('price').value = p.price;
-            document.getElementById('stock').value = p.stock || 50;
-            
+            document.getElementById('stock').value = p.stock !== undefined ? p.stock : 50;
             const stat = p.status || 'Đang bán';
             selectCustomOption('modalStatus', stat, stat);
-
             document.getElementById('description').value = p.description || '';
             document.getElementById('image').value = p.image;
-
             document.getElementById('productModal').classList.remove('hidden');
             document.getElementById('productModal').classList.add('flex');
         }
-
         function closeModal() {
             document.getElementById('productModal').classList.remove('flex');
             document.getElementById('productModal').classList.add('hidden');
         }
-
         function openImageModal(url) {
             document.getElementById('enlargedImg').src = url;
             document.getElementById('imageModal').classList.remove('hidden');
             document.getElementById('imageModal').classList.add('flex');
         }
-
         function closeImageModal() {
             document.getElementById('imageModal').classList.remove('flex');
             document.getElementById('imageModal').classList.add('hidden');
         }
-
         async function handleSaveProduct(e) {
             e.preventDefault();
             const id = document.getElementById('productId').value;
@@ -982,9 +1199,7 @@
             const status = document.getElementById('status').value;
             const description = document.getElementById('description').value.trim();
             const image = document.getElementById('image').value.trim();
-
             const productData = { name, category, price, stock, status, description, image };
-
             try {
                 let error;
                 if (isEditing) {
@@ -994,9 +1209,8 @@
                     const res = await supabaseClient.from('products').insert([productData]);
                     error = res.error;
                 }
-
                 if (error) throw error;
-
+                logAdminActivity(isEditing ? `Đã cập nhật sản phẩm "${name}"` : `Đã thêm sản phẩm mới "${name}"`);
                 alert(isEditing ? 'Cập nhật sản phẩm thành công!' : 'Thêm sản phẩm thành công!');
                 closeModal();
                 fetchProducts();
@@ -1005,13 +1219,12 @@
                 alert('Có lỗi xảy ra khi lưu sản phẩm: ' + err.message);
             }
         }
-
         async function deleteProduct(id) {
             if (!confirm('Bạn có chắc chắn muốn xóa sản phẩm này không?')) return;
             try {
                 const { error } = await supabaseClient.from('products').delete().eq('id', id);
                 if (error) throw error;
-
+                logAdminActivity(`Đã xóa sản phẩm id #${id}`);
                 alert('Đã xóa sản phẩm thành công!');
                 fetchProducts();
             } catch (err) {
@@ -1019,8 +1232,6 @@
                 alert('Xóa sản phẩm thất bại!');
             }
         }
-
-        // --- 5. SUPABASE REALTIME NOTIFICATION ---
         function setupRealtimeListeners() {
             supabaseClient
                 .channel('admin-realtime-channel')
@@ -1040,13 +1251,95 @@
                 })
                 .subscribe();
         }
-
-        // Khởi chạy khi load trang quản trị
         fetchOrders();
+        fetchCoupons();
         fetchContacts();
         fetchUsers();
+        fetchActivityLogs();
         fetchProducts();
         setupRealtimeListeners();
+ </script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
     </script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+</script>
+<div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            function highlightNav(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.remove('text-slate-700', 'font-medium');
+                    el.classList.add('text-brand-600', 'font-bold');
+                }
+            }
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index") || currentPage === "") highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("contact")) highlightNav("nav-contact");
+            const authSlot = document.getElementById('nav-auth-slot');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (authSlot) {
+                if (currentUser) {
+                    const fullName = currentUser.full_name || currentUser.fullName || "Tài khoản";
+                    const shortName = fullName.split(" ").pop() || "Cá nhân";
+                    const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                    authSlot.innerHTML = `
+                        <a href="profile.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <img src="${avatar}" class="w-5 h-5 rounded-full object-cover mb-1 border border-white/60 shadow-sm">
+                            <span class="max-w-[50px] truncate">${shortName}</span>
+                        </a>
+                    `;
+                    if (currentPage.includes("profile")) highlightNav("nav-auth");
+                } else {
+                    authSlot.innerHTML = `
+                        <a href="login.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <i class="fa-solid fa-right-to-bracket text-base mb-1"></i> Đăng Nhập
+                        </a>
+                    `;
+                    if (currentPage.includes("login") || currentPage.includes("register")) highlightNav("nav-auth");
+                }
+            }
+        });
+</script>
 </body>
 </html>

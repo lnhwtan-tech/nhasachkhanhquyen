@@ -1,17 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@supabase/supabase-js');
-
 const app = express();
 app.use(cors());
-app.use(express.json({ limit: '10mb' })); // Cho phép nhận dữ liệu ảnh base64 lớn
-
+app.use(express.json({ limit: '10mb' })); 
 const supabaseUrl = 'https://dngnkhzliwsdmytrvoae.supabase.co'
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuZ25raHpsaXdzZG15dHJ2b2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MDkyMjcsImV4cCI6MjEwMzk4NTIyN30.fqZuesECwMbvbcnc4XSyGZZrPxTG5YbrPk1MlNHZB58'
-
 const supabase = createClient(supabaseUrl, supabaseKey)
-
-// 1. LẤY DANH SÁCH SẢN PHẨM
 app.get('/api/products', async (req, res) => {
     try {
         const { data, error } = await supabase.from('products').select('*').order('id', { ascending: false });
@@ -21,8 +16,6 @@ app.get('/api/products', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
-// 2. THÊM SẢN PHẨM MỚI
 app.post('/api/products', async (req, res) => {
     try {
         const { name, category, price, stock, status, description, image } = req.body;
@@ -30,15 +23,12 @@ app.post('/api/products', async (req, res) => {
             .from('products')
             .insert([{ name, category, price, stock, status, description, image }])
             .select();
-        
         if (error) throw error;
         res.json({ success: true, data });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
-
-// 3. CẬP NHẬT SẢN PHẨM
 app.put('/api/products/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -48,15 +38,12 @@ app.put('/api/products/:id', async (req, res) => {
             .update({ name, category, price, stock, status, description, image })
             .eq('id', id)
             .select();
-
         if (error) throw error;
         res.json({ success: true, data });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
-
-// 4. XÓA SẢN PHẨM
 app.delete('/api/products/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -67,7 +54,6 @@ app.delete('/api/products/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
 const PORT = 5000;
 app.listen(PORT, () => {
     console.log(`Server đang chạy tại http://localhost:${PORT}`);

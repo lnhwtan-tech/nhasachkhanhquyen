@@ -1,0 +1,63 @@
+<style>
+    .liquid-glass-dock {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+    .smart-contrast {
+        mix-blend-mode: difference;
+        filter: invert(1);
+    }
+</style>
+<nav class="liquid-glass-dock fixed bottom-4 left-4 right-4 rounded-3xl flex justify-around py-3 z-50 block md:hidden">
+    <a href="index.html" id="nav-home" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+        <i class="fa-solid fa-house text-base mb-1"></i> Trang Chủ
+    </a>
+    <a href="products.html" id="nav-products" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+        <i class="fa-solid fa-store text-base mb-1"></i> Sản Phẩm
+    </a>
+    <a href="contact.html" id="nav-contact" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+        <i class="fa-solid fa-phone text-base mb-1"></i> Liên Hệ
+    </a>
+    <div id="nav-auth-slot" class="flex flex-col items-center py-0.5"></div>
+</nav>
+<script>
+    (function() {
+        const currentPage = window.location.pathname.split("/").pop() || "index.html";
+        function highlightNav(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.classList.remove('text-slate-700', 'font-medium');
+                el.classList.add('text-brand-600', 'font-bold');
+            }
+        }
+        if (currentPage.includes("index") || currentPage === "") highlightNav("nav-home");
+        else if (currentPage.includes("product")) highlightNav("nav-products");
+        else if (currentPage.includes("contact")) highlightNav("nav-contact");
+        const authSlot = document.getElementById('nav-auth-slot');
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (authSlot) {
+            if (currentUser) {
+                const fullName = currentUser.full_name || currentUser.fullName || "Tài khoản";
+                const shortName = fullName.split(" ").pop() || "Cá nhân";
+                const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                authSlot.innerHTML = `
+                    <a href="profile.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                        <img src="${avatar}" class="w-5 h-5 rounded-full object-cover mb-1 border border-white/60 shadow-sm">
+                        <span class="max-w-[50px] truncate">${shortName}</span>
+                    </a>
+                `;
+                if (currentPage.includes("profile")) highlightNav("nav-auth");
+            } else {
+                authSlot.innerHTML = `
+                    <a href="login.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                        <i class="fa-solid fa-right-to-bracket text-base mb-1"></i> Đăng Nhập
+                    </a>
+                `;
+                if (currentPage.includes("login") || currentPage.includes("register")) highlightNav("nav-auth");
+            }
+        }
+    })();
+</script>

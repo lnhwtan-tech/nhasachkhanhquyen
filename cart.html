@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -25,86 +26,129 @@
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-600 selection:text-white" onclick="closeAllDropdowns(event)">
-
-    <!-- TOP MARKETING BANNER -->
-    <div class="bg-dark text-white text-xs sm:text-sm font-medium py-2.5 px-4 text-center tracking-wide relative z-50">
-        🔥 <span class="underline decoration-brand-500 font-bold">KHÁNH QYÊN MEGA SALE:</span> Nhập mã <span class="bg-brand-600 px-2 py-0.5 rounded text-white font-bold">KQ30</span> giảm 30% toàn bộ!
-    </div>
-
-     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-4">
-            <a href="index.html" class="flex items-center gap-2 group shrink-0">
-<div class="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-slate-200 shrink-0 bg-amber-400">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<a href="index.html" class="flex items-center gap-3 group shrink-0">
+    <div class="w-12 h-12 rounded-xl overflow-hidden shadow-sm border border-slate-200 shrink-0 bg-amber-400">
         <img src="khanhquyen.png" alt="Logo Khánh Quyên" class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
     </div>
     <div>
         <span class="text-sm sm:text-base font-extrabold tracking-tight text-dark block leading-none">Nhà Sách & Văn Phòng Phẩm</span>
         <span class="text-[10px] text-brand-600 font-bold tracking-widest uppercase">KHÁNH QUYÊN</span>
-                </div>
-            </a>
-            
+    </div>
+</a>
 <nav class="hidden md:flex items-center space-x-6 text-sm font-semibold text-slate-600 shrink-0">
+            <nav class="hidden md:flex items-center space-x-6 text-sm font-semibold text-slate-600 shrink-0">
                 <a href="index.html" class="hover:text-brand-600 transition">Trang Chủ</a>
                 <a href="products.html" class="hover:text-brand-600 transition">Sản Phẩm</a>
-                <!-- Thêm mục Liên hệ lên thanh header -->
                 <a href="contact.html" class="hover:text-brand-600 transition">Liên Hệ</a>
             </nav>
-
             <div class="flex items-center space-x-4">
-                <a href="cart.html" class="relative bg-slate-100 hover:bg-slate-200 p-3 rounded-full text-slate-700 transition">
+                <a href="cart.html" class="relative bg-slate-100 bg-slate-200 p-3 rounded-full text-slate-700 transition">
                     <i class="fa-solid fa-bag-shopping text-base"></i>
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                 </a>
-
-                <!-- KHU VỰC TÀI KHOẢN VỚI DROPDOWN CHI TIẾT -->
                 <div id="auth-action-container" class="relative flex items-center gap-3">
-                    <!-- Javascript sẽ tự điền nút vào đây -->
                 </div>
             </div>
         </div>
     </header>
-
-    <!-- NỘI DUNG GIỎ HÀNG -->
-    <section class="py-16">
-        <div class="max-w-4xl mx-auto px-6">
-            <h1 class="text-3xl font-extrabold text-dark mb-8 flex items-center gap-3">
-                <i class="fa-solid fa-bag-shopping text-brand-600"></i> Giỏ Hàng Của Bạn
-            </h1>
-            
-            <div id="cart-items-container" class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm mb-6 space-y-4">
-                <p class="text-center text-slate-500 py-12 text-sm">Giỏ hàng của bạn đang trống.</p>
+    <section class="py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-3xl font-extrabold text-dark flex items-center gap-3">
+                        <i class="fa-solid fa-bag-shopping text-brand-600"></i> Giỏ Hàng Chi Tiết
+                    </h1>
+                    <p class="text-xs text-slate-500 mt-1">Kiểm tra lại danh sách sản phẩm, số lượng và tổng tiền trước khi đặt hàng.</p>
+                </div>
+                <a href="products.html" class="text-xs font-bold text-brand-600 hover:text-brand-700 flex items-center gap-1.5 self-start md:self-auto">
+                    <i class="fa-solid fa-arrow-left"></i> Tiếp tục mua sắm
+                </a>
             </div>
-
-            <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-                <div class="flex justify-between text-sm mb-2">
-                    <span class="text-slate-600">Tạm tính:</span>
-                    <span id="cart-subtotal" class="font-bold text-dark">0đ</span>
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+                        <div class="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider pb-4 border-b border-slate-100 mb-4">
+                            <span>Sản phẩm trong giỏ</span>
+                            <span>Thao tác</span>
+                        </div>
+                        <div id="cart-items-container" class="space-y-4">
+                            <p class="text-center text-slate-500 py-12 text-sm">Giỏ hàng của bạn đang trống.</p>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-truck-fast text-base"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-extrabold text-dark mb-0.5">Giao Hàng & Giữ Chỗ Nhanh</h4>
+                                <p class="text-[11px] text-slate-500 leading-normal">Nhận tại nhà sách hoặc giao tận nơi linh hoạt.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-start gap-3.5">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+                                <i class="fa-solid fa-shield-halved text-base"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-xs font-extrabold text-dark mb-0.5">Cam Kết Chất Lượng</h4>
+                                <p class="text-[11px] text-slate-500 leading-normal">Sách chuẩn nhà xuất bản, văn phòng phẩm chính hãng.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex justify-between text-sm mb-4">
-                    <span class="text-slate-600">Giảm giá (Mã KQ30):</span>
-                    <span id="cart-discount" class="font-bold text-brand-600">-0đ</span>
+                <div class="lg:col-span-5">
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm sticky top-28">
+                        <h3 class="text-base font-extrabold text-dark pb-4 border-b border-slate-100 mb-4">Cộng Giỏ Hàng</h3>
+                        <div class="space-y-3 text-sm mb-4">
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">Tạm tính sản phẩm:</span>
+                                <span id="cart-subtotal" class="font-bold text-dark">0đ</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">Giảm giá (<span id="applied-code-label">Chưa chọn mã</span>):</span>
+                                <span id="cart-discount" class="font-bold text-brand-600">-0đ</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-slate-600">Phí vận chuyển:</span>
+                                <span class="font-bold text-emerald-600">Miễn phí</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-base font-extrabold mb-6 pt-4 border-t border-slate-200">
+                            <span class="text-dark">Tổng thanh toán:</span>
+                            <span id="cart-total" class="text-brand-600 text-xl">0đ</span>
+                        </div>
+                        <div class="mb-2">
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">Mã Giảm Giá</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="coupon-input" placeholder="NHẬP MÃ GIẢM GIÁ..." class="flex-1 bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm uppercase focus:outline-none focus:border-brand-600 font-bold">
+                                <button onclick="applyCouponInput()" class="bg-dark hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition">Áp Dụng</button>
+                            </div>
+                        </div>
+                        <div id="cancel-coupon-container" class="hidden mb-4">
+                            <button onclick="removeCoupon()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-xmark text-brand-600"></i> Hủy chọn mã giảm giá hiện tại
+                            </button>
+                        </div>
+                        <div class="mb-6 p-3.5 bg-slate-50 rounded-xl border border-slate-200 mt-4">
+                            <h4 class="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                                <i class="fa-solid fa-ticket text-brand-600"></i> Mã ưu đãi khả dụng
+                            </h4>
+                            <div id="available-coupons-list" class="space-y-2 max-h-40 overflow-y-auto pr-1">
+                                <p class="text-xs text-slate-400 text-center py-2">Đang tải mã giảm giá...</p>
+                            </div>
+                        </div>
+                        <button onclick="checkout()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-600/30 transition text-center block">
+                            Tiến Hành Thanh Toán Ngay
+                        </button>
+                    </div>
                 </div>
-                <div class="flex justify-between text-base font-extrabold mb-6 pt-4 border-t border-slate-200">
-                    <span class="text-dark">Tổng thanh toán:</span>
-                    <span id="cart-total" class="text-brand-600 text-xl">0đ</span>
-                </div>
-                
-                <div class="flex gap-2 mb-4">
-                    <input type="text" id="coupon-input" placeholder="Nhập mã KQ30" class="flex-1 bg-white border border-slate-300 rounded-xl px-4 py-2.5 text-sm uppercase focus:outline-none focus:border-brand-600 font-bold">
-                    <button onclick="applyCoupon()" class="bg-dark hover:bg-slate-800 text-white px-5 py-2.5 rounded-xl text-sm font-bold transition">Áp Dụng</button>
-                </div>
-
-                <button onclick="checkout()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-600/30 transition text-center block">
-                    Tiến Hành Thanh Toán
-                </button>
             </div>
         </div>
     </section>
-
-<!-- FOOTER -->
-    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-sm">
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-sm mt-12">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
-            <!-- Cột 1: Thông tin thương hiệu -->
             <div class="md:col-span-5 space-y-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl overflow-hidden bg-amber-400 flex items-center justify-center shrink-0">
@@ -120,8 +164,6 @@
                     <p><i class="fa-solid fa-phone text-brand-500 w-5"></i> 0978 031 871</p>
                 </div>
             </div>
-
-            <!-- Cột 2: Liên kết nhanh -->
             <div class="md:col-span-3 space-y-3">
                 <h4 class="text-white font-bold text-xs uppercase tracking-wider">Khám Phá</h4>
                 <ul class="space-y-2 text-xs">
@@ -130,8 +172,6 @@
                     <li><a href="contact.html" class="hover:text-white transition">Liên Hệ Trực Tuyến</a></li>
                 </ul>
             </div>
-
-            <!-- Cột 3: Hỗ trợ khách hàng -->
             <div class="md:col-span-4 space-y-3">
                 <h4 class="text-white font-bold text-xs uppercase tracking-wider">Hỗ Trợ Khách Hàng</h4>
                 <p class="text-xs text-slate-400">Nhận thông tin các chương trình khuyến mãi và mã giảm giá mới nhất từ cửa hàng.</p>
@@ -141,22 +181,83 @@
                 </div>
             </div>
         </div>
-
-        <!-- Dòng bản quyền phía dưới -->
-        <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-<!-- Dòng bản quyền phía dưới -->
         <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <p>&copy; 2026 Nhà Sách & Văn Phòng Phẩm Khánh Quyên. All rights reserved.</p>
             <div class="flex items-center space-x-4">
                 <a href="https://www.facebook.com/profile.php?id=100054240650469" target="_blank" class="hover:text-white transition" title="Facebook Nhà Sách Khánh Quyên"><i class="fa-brands fa-facebook text-base"></i></a>
             </div>
         </div>
-        </div>
     </footer>
-
+    <div id="customAlertModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs hidden">
+        <div class="bg-white rounded-2xl p-6 max-w-sm w-full mx-4 shadow-2xl border border-slate-100 text-center animate-in fade-in zoom-in-95 duration-150">
+            <div id="customAlertIcon" class="w-12 h-12 rounded-full bg-brand-50 text-brand-600 flex items-center justify-center mx-auto mb-3 text-lg font-bold">
+                <i class="fa-solid fa-bell"></i>
+            </div>
+            <h3 id="customAlertTitle" class="font-extrabold text-base text-dark mb-1">Thông báo</h3>
+            <p id="customAlertMessage" class="text-xs text-slate-600 mb-5 leading-relaxed">Nội dung thông báo...</p>
+            <button onclick="closeCustomAlert()" class="w-full bg-dark hover:bg-slate-800 text-white py-2.5 rounded-xl text-xs font-bold transition">Đã hiểu</button>
+        </div>
+    </div>
     <script>
-        let discountApplied = false;
-
+const supabaseUrl = 'https://dngnkhzliwsdmytrvoae.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuZ25raHpsaXdzZG15dHJ2b2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MDkyMjcsImV4cCI6MjEwMzk4NTIyN30.fqZuesECwMbvbcnc4XSyGZZrPxTG5YbrPk1MlNHZB58'
+window.supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+        let activeCoupon = null; 
+        let availableCoupons = []; 
+        function showCustomAlert(title, message, type = "info") {
+            document.getElementById('customAlertTitle').innerText = title;
+            document.getElementById('customAlertMessage').innerText = message;
+            document.getElementById('customAlertModal').classList.remove('hidden');
+        }
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').classList.add('hidden');
+        }
+        async function fetchCoupons() {
+            const container = document.getElementById('available-coupons-list');
+            if (!supabaseClient) {
+                availableCoupons = [
+                    { code: 'KQ30', discount_type: 'percent', discount_value: 30, min_order_value: 0 }
+                ];
+                renderCoupons();
+                return;
+            }
+            try {
+                const { data, error } = await supabaseClient
+                    .from('coupons')
+                    .select('*')
+                    .or(`expires_at.is.null,expires_at.gte.${new Date().toISOString()}`);
+                if (error) throw error;
+                availableCoupons = data || [];
+                renderCoupons();
+            } catch (err) {
+                console.error('Lỗi tải mã giảm giá:', err);
+                container.innerHTML = `<p class="text-xs text-red-500 text-center py-2">Không thể tải mã giảm giá.</p>`;
+            }
+        }
+        function renderCoupons() {
+            const container = document.getElementById('available-coupons-list');
+            if (availableCoupons.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 text-center py-2">Không có mã giảm giá nào.</p>`;
+                return;
+            }
+            container.innerHTML = availableCoupons.map(coupon => {
+                const isSelected = activeCoupon && activeCoupon.code.toUpperCase() === coupon.code.toUpperCase();
+                const desc = coupon.discount_type === 'percent' 
+                    ? `Giảm ${coupon.discount_value}%` 
+                    : `Giảm ${Number(coupon.discount_value).toLocaleString('vi-VN')}đ`;
+                return `
+                    <div class="flex items-center justify-between p-2.5 bg-white rounded-xl border ${isSelected ? 'border-brand-600 bg-brand-50/50' : 'border-slate-200'} shadow-xs">
+                        <div>
+                            <span class="font-extrabold text-xs text-dark block">${coupon.code}</span>
+                            <span class="text-[10px] text-brand-600 font-bold">${desc}</span>
+                        </div>
+                        <button onclick="selectCoupon('${coupon.code}')" class="px-2.5 py-1 rounded-lg text-[10px] font-bold transition ${isSelected ? 'bg-brand-600 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-700'}">
+                            ${isSelected ? 'Đang dùng' : 'Dùng mã'}
+                        </button>
+                    </div>
+                `;
+            }).join('');
+        }
         function loadCart() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             const container = document.getElementById('cart-items-container');
@@ -164,10 +265,10 @@
             const subtotalEl = document.getElementById('cart-subtotal');
             const discountEl = document.getElementById('cart-discount');
             const totalEl = document.getElementById('cart-total');
-
+            const appliedCodeLabel = document.getElementById('applied-code-label');
+            const cancelContainer = document.getElementById('cancel-coupon-container');
             const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
             countBadge.innerText = totalCount;
-
             if (cart.length === 0) {
                 container.innerHTML = `<p class="text-center text-slate-500 py-12 text-sm">Giỏ hàng của bạn đang trống.</p>`;
                 subtotalEl.innerText = '0đ';
@@ -175,35 +276,56 @@
                 totalEl.innerText = '0đ';
                 return;
             }
-
             let subtotal = 0;
             container.innerHTML = cart.map((item, index) => {
                 subtotal += item.price * item.quantity;
                 return `
-                    <div class="flex items-center gap-4 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
-                        <img src="${item.image}" class="w-16 h-20 object-cover rounded-lg">
-                        <div class="flex-1">
-                            <h4 class="font-bold text-dark text-sm line-clamp-1">${item.name}</h4>
-                            <p class="text-brand-600 font-bold text-sm mt-0.5">${item.price.toLocaleString('vi-VN')}đ</p>
-                            <div class="flex items-center gap-3 mt-2">
+                    <div class="flex items-center gap-4 bg-white p-3.5 rounded-xl border border-slate-100 shadow-sm">
+                        <img src="${item.image}" class="w-16 h-20 object-cover rounded-lg shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <span class="text-[10px] text-slate-400 font-bold block uppercase">Sản phẩm chính hãng</span>
+                            <h4 class="font-bold text-dark text-sm truncate">${item.name}</h4>
+                            <p class="text-brand-600 font-bold text-xs mt-0.5">Đơn giá: ${item.price.toLocaleString('vi-VN')}đ</p>
+                        </div>
+                        <div class="flex items-center gap-3 shrink-0">
+                            <div class="flex items-center gap-2">
                                 <button onclick="changeQuantity(${index}, -1)" class="w-6 h-6 bg-slate-100 rounded flex items-center justify-center font-bold text-slate-600 hover:bg-slate-200">-</button>
-                                <span class="text-sm font-bold">${item.quantity}</span>
+                                <span class="text-sm font-bold w-4 text-center">${item.quantity}</span>
                                 <button onclick="changeQuantity(${index}, 1)" class="w-6 h-6 bg-slate-100 rounded flex items-center justify-center font-bold text-slate-600 hover:bg-slate-200">+</button>
                             </div>
+                            <span class="text-sm font-extrabold text-dark w-20 text-right">${(item.price * item.quantity).toLocaleString('vi-VN')}đ</span>
+                            <button onclick="removeFromCart(${index})" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
                         </div>
-                        <button onclick="removeFromCart(${index})" class="text-slate-400 hover:text-red-500 p-2"><i class="fa-solid fa-trash-can"></i></button>
                     </div>
                 `;
             }).join('');
-
-            const discount = discountApplied ? subtotal * 0.3 : 0;
+let discount = 0;
+            if (activeCoupon) {
+                if (subtotal < (activeCoupon.min_order_value || 0)) {
+                    showCustomAlert("Thông báo", "Đơn hàng chưa đủ điều kiện tối thiểu để áp dụng mã giảm giá này", "info");
+                    activeCoupon = null;
+                    localStorage.removeItem('activeCoupon');
+                    loadCart(); 
+                    return;
+                }
+                if (activeCoupon.discount_type === 'percent') {
+                    discount = subtotal * (Number(activeCoupon.discount_value) / 100);
+                } else {
+                    discount = Number(activeCoupon.discount_value);
+                    if (discount > subtotal) discount = subtotal;
+                }
+                appliedCodeLabel.innerText = `Mã ưu đãi ${activeCoupon.code}`;
+                cancelContainer.classList.remove('hidden');
+            } else {
+                appliedCodeLabel.innerText = 'Chưa chọn mã';
+                cancelContainer.classList.add('hidden');
+            }
             const total = subtotal - discount;
-
             subtotalEl.innerText = subtotal.toLocaleString('vi-VN') + 'đ';
             discountEl.innerText = '-' + discount.toLocaleString('vi-VN') + 'đ';
             totalEl.innerText = total.toLocaleString('vi-VN') + 'đ';
+            renderCoupons();
         }
-
         function changeQuantity(index, delta) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart[index].quantity += delta;
@@ -213,39 +335,57 @@
             localStorage.setItem('cart', JSON.stringify(cart));
             loadCart();
         }
-
         function removeFromCart(index) {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.splice(index, 1);
             localStorage.setItem('cart', JSON.stringify(cart));
             loadCart();
         }
-
-        function applyCoupon() {
-            const code = document.getElementById('coupon-input').value.trim().toUpperCase();
-            if (code === 'KQ30') {
-                discountApplied = true;
-                showCustomAlert("Thông báo", 'Áp dụng mã giảm giá KQ30 thành công (-30%)!', "info");
-            } else {
-                discountApplied = false;
-                showCustomAlert("Thông báo", 'Mã giảm giá không hợp lệ.', "info");
+        function applyCouponInput() {
+            const codeInput = document.getElementById('coupon-input').value.trim().toUpperCase();
+            if (!codeInput) {
+                showCustomAlert("Thông báo", 'Vui lòng nhập mã giảm giá.', "info");
+                return;
             }
+            const found = availableCoupons.find(c => c.code.toUpperCase() === codeInput);
+            if (found) {
+                activeCoupon = found;
+                document.getElementById('coupon-input').value = '';
+                showCustomAlert("Thành công", `Áp dụng mã giảm giá ${found.code} thành công!`, "info");
+                loadCart();
+            } else {
+                showCustomAlert("Thông báo", 'Mã giảm giá không hợp lệ hoặc không tồn tại.', "info");
+            }
+        }
+        function selectCoupon(code) {
+            const found = availableCoupons.find(c => c.code.toUpperCase() === code.toUpperCase());
+            if (found) {
+                activeCoupon = found;
+                showCustomAlert("Thành công", `Đã chọn mã giảm giá ${found.code}!`, "info");
+                loadCart();
+            }
+        }
+        function removeCoupon() {
+            activeCoupon = null;
+            document.getElementById('coupon-input').value = '';
+            showCustomAlert("Thông báo", 'Đã hủy chọn mã giảm giá.', "info");
             loadCart();
         }
-
         function checkout() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             if (cart.length === 0) {
-                showCustomAlert("Thông báo", 'Giỏ hàng trống!', "info");
+                showCustomAlert("Thông báo", 'Giỏ hàng của bạn đang trống!', "info");
                 return;
             }
-            if (discountApplied) {
+            if (activeCoupon) {
+                sessionStorage.setItem('activeCoupon', JSON.stringify(activeCoupon));
                 sessionStorage.setItem('discountActive', 'true');
+            } else {
+                sessionStorage.removeItem('activeCoupon');
+                sessionStorage.removeItem('discountActive');
             }
             window.location.href = 'checkout.html';
         }
-
-        // --- XỬ LÝ DROPDOWN TÀI KHOẢN ---
         function toggleUserDropdown(event) {
             event.stopPropagation();
             const menu = document.getElementById('userDropdownMenu');
@@ -253,18 +393,15 @@
                 menu.classList.toggle('hidden');
             }
         }
-
         function closeAllDropdowns(event) {
             const userMenu = document.getElementById('userDropdownMenu');
             if (userMenu && !userMenu.classList.contains('hidden')) {
                 userMenu.classList.add('hidden');
             }
         }
-
         function updateHeaderAuth() {
             const container = document.getElementById('auth-action-container');
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
             if (currentUser) {
                 const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
                 const fullName = currentUser.full_name || currentUser.fullName || "Thành viên";
@@ -273,12 +410,10 @@
                 const email = currentUser.email || "Chưa cập nhật";
                 const gender = currentUser.gender || "Chưa cập nhật";
                 const role = currentUser.role || 'customer';
-
                 let adminMenuLink = '';
                 if (role === 'admin') {
                     adminMenuLink = `<a href="admin.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 transition border-b border-slate-100"><i class="fa-solid fa-gauge-high w-4"></i> Trang Quản Trị</a>`;
                 }
-
                 container.innerHTML = `
                     <div class="relative">
                         <button onclick="toggleUserDropdown(event)" class="flex items-center gap-2.5 bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-2xl border border-slate-200 transition cursor-pointer">
@@ -286,7 +421,6 @@
                             <span class="text-xs font-bold text-slate-800 max-w-[120px] truncate">${fullName}</span>
                             <i class="fa-solid fa-chevron-down text-[10px] text-slate-500"></i>
                         </button>
-
                         <div id="userDropdownMenu" class="absolute right-0 mt-2 w-72 bg-white rounded-3xl shadow-2xl border border-slate-100 hidden z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
                             <div class="bg-dark text-white p-4 text-center relative">
                                 <div class="w-16 h-16 rounded-2xl bg-white p-1 mx-auto shadow-md mb-2 overflow-hidden">
@@ -295,7 +429,6 @@
                                 <h4 class="font-extrabold text-sm truncate">${fullName}</h4>
                                 <span class="text-[10px] text-brand-400 font-bold uppercase tracking-wider">@${username} (${role})</span>
                             </div>
-
                             <div class="p-4 space-y-2 text-xs text-slate-600 border-b border-slate-100">
                                 <div class="flex items-center justify-between">
                                     <span class="text-slate-400 font-medium"><i class="fa-solid fa-phone mr-1.5 w-4"></i> Số điện thoại:</span>
@@ -310,17 +443,15 @@
                                     <span class="font-bold text-slate-800">${gender}</span>
                                 </div>
                             </div>
-
-<div class="py-1">
-    ${adminMenuLink}
-    <!-- THÊM DÒNG NÀY VÀO -->
-    <a href="profile.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition border-b border-slate-100">
-        <i class="fa-solid fa-user-pen w-4 text-brand-600"></i> Chỉnh Sửa Hồ Sơ
-    </a>
-    <button onclick="handleLogout()" class="w-full text-left flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-red-50 hover:text-red-600 transition">
-        <i class="fa-solid fa-right-from-bracket w-4"></i> Đăng Xuất Tài Khoản
-    </button>
-</div>
+                            <div class="py-1">
+                                ${adminMenuLink}
+                                <a href="profile.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition border-b border-slate-100">
+                                    <i class="fa-solid fa-user-pen w-4 text-brand-600"></i> Chỉnh Sửa Hồ Sơ
+                                </a>
+                                <button onclick="handleLogout()" class="w-full text-left flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-red-50 hover:text-red-600 transition">
+                                    <i class="fa-solid fa-right-from-bracket w-4"></i> Đăng Xuất Tài Khoản
+                                </button>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -332,16 +463,116 @@
                 `;
             }
         }
-
         function handleLogout() {
             localStorage.removeItem('currentUser');
             showCustomAlert("Thông báo", 'Đã đăng xuất tài khoản thành công!', "info");
             window.location.reload();
         }
-
-        // Chạy khởi tạo giỏ hàng và trạng thái auth khi tải trang
+        fetchCoupons();
         loadCart();
         updateHeaderAuth();
     </script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+</script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+    </script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+</script>
+<div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            function highlightNav(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.remove('text-slate-700', 'font-medium');
+                    el.classList.add('text-brand-600', 'font-bold');
+                }
+            }
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index") || currentPage === "") highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("contact")) highlightNav("nav-contact");
+            const authSlot = document.getElementById('nav-auth-slot');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (authSlot) {
+                if (currentUser) {
+                    const fullName = currentUser.full_name || currentUser.fullName || "Tài khoản";
+                    const shortName = fullName.split(" ").pop() || "Cá nhân";
+                    const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                    authSlot.innerHTML = `
+                        <a href="profile.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <img src="${avatar}" class="w-5 h-5 rounded-full object-cover mb-1 border border-white/60 shadow-sm">
+                            <span class="max-w-[50px] truncate">${shortName}</span>
+                        </a>
+                    `;
+                    if (currentPage.includes("profile")) highlightNav("nav-auth");
+                } else {
+                    authSlot.innerHTML = `
+                        <a href="login.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <i class="fa-solid fa-right-to-bracket text-base mb-1"></i> Đăng Nhập
+                        </a>
+                    `;
+                    if (currentPage.includes("login") || currentPage.includes("register")) highlightNav("nav-auth");
+                }
+            }
+        });
+</script>
 </body>
 </html>

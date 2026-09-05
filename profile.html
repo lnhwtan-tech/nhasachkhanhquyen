@@ -25,13 +25,6 @@
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-600 selection:text-white" onclick="closeAllDropdowns(event)">
-
-    <!-- TOP MARKETING BANNER -->
-    <div class="bg-dark text-white text-xs sm:text-sm font-medium py-2.5 px-4 text-center tracking-wide relative z-50">
-        🔥 <span class="underline decoration-brand-500 font-bold">KHÁNH QYÊN MEGA SALE:</span> Nhập mã <span class="bg-brand-600 px-2 py-0.5 rounded text-white font-bold">KQ30</span> giảm 30% toàn bộ!
-    </div>
-
-    <!-- HEADER -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2 group">
@@ -41,26 +34,20 @@
                     <span class="text-[10px] text-brand-600 font-bold tracking-widest uppercase">KHÁNH QUYÊN OFFICIAL</span>
                 </div>
             </a>
-            
             <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
                 <a href="index.html" class="hover:text-brand-600 transition">Trang Chủ</a>
                 <a href="products.html" class="hover:text-brand-600 transition">Sản Phẩm</a>
                 <a href="cart.html" class="hover:text-brand-600 transition">Giỏ Hàng</a>
             </nav>
-
             <div class="flex items-center space-x-4">
                 <a href="cart.html" class="relative bg-slate-100 hover:bg-slate-200 p-3 rounded-full text-slate-700 transition">
                     <i class="fa-solid fa-bag-shopping text-base"></i>
                     <span id="cart-count" class="absolute -top-1 -right-1 bg-brand-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
                 </a>
-
-                <!-- KHU VỰC TÀI KHOẢN -->
                 <div id="auth-action-container" class="relative flex items-center gap-3"></div>
             </div>
         </div>
     </header>
-
-    <!-- NỘI DUNG CHỈNH SỬA PROFILE -->
     <section class="py-16">
         <div class="max-w-2xl mx-auto px-6">
             <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
@@ -73,13 +60,11 @@
                         <p class="text-xs text-slate-500 mt-1">Cập nhật thông tin tài khoản và tùy chỉnh ảnh đại diện của bạn.</p>
                     </div>
                 </div>
-
                 <form onsubmit="handleUpdateProfile(event)" class="space-y-5">
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Tên đăng nhập (Không thể đổi)</label>
                         <input type="text" id="profile-username" disabled class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm text-slate-500 font-bold cursor-not-allowed">
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Họ và tên</label>
@@ -90,7 +75,6 @@
                             <input type="text" id="profile-phone" required class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600 font-bold">
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Email</label>
@@ -105,13 +89,11 @@
                             </select>
                         </div>
                     </div>
-
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Đường dẫn ảnh đại diện (Avatar URL) hoặc tải file</label>
                         <input type="text" id="profile-avatar" oninput="updateAvatarPreview(this.value)" placeholder="Nhập link ảnh (https://...)" class="w-full bg-slate-100 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600 mb-2">
                         <input type="file" accept="image/*" onchange="handleFileUpload(event)" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-brand-50 file:text-brand-600 hover:file:bg-brand-100 transition cursor-pointer">
                     </div>
-
                     <div class="pt-4 flex gap-4">
                         <a href="index.html" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 rounded-xl transition text-center text-xs flex items-center justify-center">Quay Lại</a>
                         <button type="submit" class="flex-1 bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand-600/30 transition text-xs">Lưu Thay Đổi</button>
@@ -120,11 +102,8 @@
             </div>
         </div>
     </section>
-
-<!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-sm">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
-            <!-- Cột 1: Thông tin thương hiệu -->
             <div class="md:col-span-5 space-y-4">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl overflow-hidden bg-amber-400 flex items-center justify-center shrink-0">
@@ -140,8 +119,6 @@
                     <p><i class="fa-solid fa-phone text-brand-500 w-5"></i> 0978 031 871</p>
                 </div>
             </div>
-
-            <!-- Cột 2: Liên kết nhanh -->
             <div class="md:col-span-3 space-y-3">
                 <h4 class="text-white font-bold text-xs uppercase tracking-wider">Khám Phá</h4>
                 <ul class="space-y-2 text-xs">
@@ -150,8 +127,6 @@
                     <li><a href="contact.html" class="hover:text-white transition">Liên Hệ Trực Tuyến</a></li>
                 </ul>
             </div>
-
-            <!-- Cột 3: Hỗ trợ khách hàng -->
             <div class="md:col-span-4 space-y-3">
                 <h4 class="text-white font-bold text-xs uppercase tracking-wider">Hỗ Trợ Khách Hàng</h4>
                 <p class="text-xs text-slate-400">Nhận thông tin các chương trình khuyến mãi và mã giảm giá mới nhất từ cửa hàng.</p>
@@ -161,10 +136,7 @@
                 </div>
             </div>
         </div>
-
-        <!-- Dòng bản quyền phía dưới -->
         <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-<!-- Dòng bản quyền phía dưới -->
         <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <p>&copy; 2026 Nhà Sách & Văn Phòng Phẩm Khánh Quyên. All rights reserved.</p>
             <div class="flex items-center space-x-4">
@@ -173,34 +145,27 @@
         </div>
         </div>
     </footer>
-
     <script>
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
         if (!currentUser) {
             showCustomAlert("Thông báo", 'Vui lòng đăng nhập để truy cập trang này!', "info");
             window.location.href = 'login.html';
         }
-
-        // Đổ dữ liệu hiện tại vào form
         function loadUserData() {
             document.getElementById('profile-username').value = currentUser.username || '';
             document.getElementById('profile-fullname').value = currentUser.full_name || currentUser.fullName || '';
             document.getElementById('profile-phone').value = currentUser.phone || '';
             document.getElementById('profile-email').value = currentUser.email || '';
             document.getElementById('profile-gender').value = currentUser.gender || 'Nam';
-            
             const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
             document.getElementById('profile-avatar').value = currentUser.avatar || '';
             document.getElementById('avatar-preview').src = avatar;
         }
-
         function updateAvatarPreview(url) {
             if (url.trim() !== '') {
                 document.getElementById('avatar-preview').src = url;
             }
         }
-
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (file) {
@@ -213,46 +178,35 @@
                 reader.readAsDataURL(file);
             }
         }
-
         function handleUpdateProfile(e) {
             e.preventDefault();
-            
             currentUser.full_name = document.getElementById('profile-fullname').value.trim();
-            currentUser.fullName = currentUser.full_name; // Đồng bộ cả 2 biến khóa
+            currentUser.fullName = currentUser.full_name; 
             currentUser.phone = document.getElementById('profile-phone').value.trim();
             currentUser.email = document.getElementById('profile-email').value.trim();
             currentUser.gender = document.getElementById('profile-gender').value;
             currentUser.avatar = document.getElementById('profile-avatar').value.trim() || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
-
-            // Lưu lại vào LocalStorage
             localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            // Nếu bạn có lưu danh sách user trong hệ thống (ví dụ mảng 'users'), có thể cập nhật ở đây luôn
             let users = JSON.parse(localStorage.getItem('users')) || [];
             let userIndex = users.findIndex(u => u.username === currentUser.username);
             if (userIndex !== -1) {
                 users[userIndex] = currentUser;
                 localStorage.setItem('users', JSON.stringify(users));
             }
-
             showCustomAlert("Thông báo", 'Cập nhật thông tin tài khoản thành công!', "info");
             window.location.href = 'index.html';
         }
-
-        // --- HỖ TRỢ DROPDOWN TÀI KHOẢN TRÊN HEADER ---
         function toggleUserDropdown(event) {
             event.stopPropagation();
             const menu = document.getElementById('userDropdownMenu');
             if (menu) menu.classList.toggle('hidden');
         }
-
         function closeAllDropdowns(event) {
             const userMenu = document.getElementById('userDropdownMenu');
             if (userMenu && !userMenu.classList.contains('hidden')) {
                 userMenu.classList.add('hidden');
             }
         }
-
         function updateHeaderAuth() {
             const container = document.getElementById('auth-action-container');
             const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
@@ -262,12 +216,10 @@
             const email = currentUser.email || "Chưa cập nhật";
             const gender = currentUser.gender || "Chưa cập nhật";
             const role = currentUser.role || 'customer';
-
             let adminMenuLink = '';
             if (role === 'admin') {
                 adminMenuLink = `<a href="admin.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-red-600 hover:bg-red-50 transition border-b border-slate-100"><i class="fa-solid fa-gauge-high w-4"></i> Trang Quản Trị</a>`;
             }
-
             container.innerHTML = `
                 <div class="relative">
                     <button onclick="toggleUserDropdown(event)" class="flex items-center gap-2.5 bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-2xl border border-slate-200 transition cursor-pointer">
@@ -275,7 +227,6 @@
                         <span class="text-xs font-bold text-slate-800 max-w-[120px] truncate">${fullName}</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-slate-500"></i>
                     </button>
-
                     <div id="userDropdownMenu" class="absolute right-0 mt-2 w-72 bg-white rounded-3xl shadow-2xl border border-slate-100 hidden z-50 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
                         <div class="bg-dark text-white p-4 text-center relative">
                             <div class="w-16 h-16 rounded-2xl bg-white p-1 mx-auto shadow-md mb-2 overflow-hidden">
@@ -284,7 +235,6 @@
                             <h4 class="font-extrabold text-sm truncate">${fullName}</h4>
                             <span class="text-[10px] text-brand-400 font-bold uppercase tracking-wider">@${username} (${role})</span>
                         </div>
-
                         <div class="p-4 space-y-2 text-xs text-slate-600 border-b border-slate-100">
                             <div class="flex items-center justify-between">
                                 <span class="text-slate-400 font-medium"><i class="fa-solid fa-phone mr-1.5 w-4"></i> Số điện thoại:</span>
@@ -299,7 +249,6 @@
                                 <span class="font-bold text-slate-800">${gender}</span>
                             </div>
                         </div>
-
                         <div class="py-1">
                             ${adminMenuLink}
                             <a href="profile.html" class="flex items-center gap-2 px-4 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition border-b border-slate-100">
@@ -313,20 +262,100 @@
                 </div>
             `;
         }
-
         function handleLogout() {
             localStorage.removeItem('currentUser');
             showCustomAlert("Thông báo", 'Đã đăng xuất tài khoản thành công!', "info");
             window.location.href = 'index.html';
         }
-
         loadUserData();
         updateHeaderAuth();
-        
-        // Cập nhật số lượng giỏ hàng trên badge header
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
         document.getElementById('cart-count').innerText = totalCount;
     </script>
+    <div id="mobile-nav-container"></div>
+</script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+    </script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+</script>
+<div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            function highlightNav(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.remove('text-slate-700', 'font-medium');
+                    el.classList.add('text-brand-600', 'font-bold');
+                }
+            }
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index") || currentPage === "") highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("contact")) highlightNav("nav-contact");
+            const authSlot = document.getElementById('nav-auth-slot');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (authSlot) {
+                if (currentUser) {
+                    const fullName = currentUser.full_name || currentUser.fullName || "Tài khoản";
+                    const shortName = fullName.split(" ").pop() || "Cá nhân";
+                    const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                    authSlot.innerHTML = `
+                        <a href="profile.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <img src="${avatar}" class="w-5 h-5 rounded-full object-cover mb-1 border border-white/60 shadow-sm">
+                            <span class="max-w-[50px] truncate">${shortName}</span>
+                        </a>
+                    `;
+                    if (currentPage.includes("profile")) highlightNav("nav-auth");
+                } else {
+                    authSlot.innerHTML = `
+                        <a href="login.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <i class="fa-solid fa-right-to-bracket text-base mb-1"></i> Đăng Nhập
+                        </a>
+                    `;
+                    if (currentPage.includes("login") || currentPage.includes("register")) highlightNav("nav-auth");
+                }
+            }
+        });
+</script>
 </body>
 </html>

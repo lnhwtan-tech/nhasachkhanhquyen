@@ -25,8 +25,6 @@
     <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-600 selection:text-white">
-
-    <!-- HEADER -->
     <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <a href="index.html" class="flex items-center gap-2 group">
@@ -41,27 +39,21 @@
             </a>
         </div>
     </header>
-
-    <!-- NỘI DUNG ĐẶT HÀNG NHẬN TẠI QUẦY -->
     <section class="py-12">
         <div class="max-w-6xl mx-auto px-6">
             <h1 class="text-3xl font-extrabold text-dark mb-2 flex items-center gap-3">
                 <i class="fa-solid fa-store text-brand-600"></i> Đặt Hàng Giữ Chỗ
             </h1>
             <p class="text-xs text-slate-500 mb-8">Shop hiện tại áp dụng hình thức khách đặt đơn trên web và ghé trực tiếp cửa hàng để nhận sản phẩm.</p>
-
             <form onsubmit="handlePlaceOrder(event)" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                <!-- THÔNG TIN KHÁCH HÀNG & BẢN ĐỒ -->
                 <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-6">
                     <h2 class="text-lg font-bold text-dark border-b border-slate-100 pb-3 flex items-center gap-2">
                         <i class="fa-solid fa-user-check text-brand-600"></i> Thông Tin Người Đặt
                     </h2>
-
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Họ và tên</label>
                         <input type="text" id="c-name" required placeholder="Nhập họ và tên của bạn..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600">
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Số điện thoại liên hệ</label>
@@ -72,13 +64,10 @@
                             <input type="text" id="c-time" placeholder="Ví dụ: Chiều nay lúc 15h..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600">
                         </div>
                     </div>
-
                     <div>
                         <label class="block text-xs font-bold text-slate-600 mb-1 uppercase">Ghi chú thêm (nếu có)</label>
                         <textarea id="c-note" rows="2" placeholder="Yêu cầu bọc sách, kiểm tra kỹ sản phẩm..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-600"></textarea>
                     </div>
-
-                    <!-- KHU VỰC THÔNG TIN ĐỊA CHỈ & GOOGLE MAPS -->
                     <div class="bg-brand-50 border border-brand-100 rounded-2xl p-5 space-y-3">
                         <div class="flex items-start justify-between">
                             <div>
@@ -91,8 +80,6 @@
                                 <i class="fa-solid fa-directions"></i> Chỉ đường
                             </a>
                         </div>
-
-                        <!-- Khung nhúng Google Maps hiển thị vị trí ghim -->
                         <div class="w-full h-48 rounded-xl overflow-hidden border border-brand-200 shadow-inner">
                             <iframe 
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.841514781525!2d106.3581531!3d10.3125275!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x310aaf692d9e152d%3A0xa27a3d774886bb30!2zTmjDoCBTw6FjaCBLaMOhggbggUXV5w6pu!5e0!3m2!1svi!2s!4v1710000000000!5m2!1svi!2s" 
@@ -104,20 +91,14 @@
                                 referrerpolicy="no-referrer-when-downgrade">
                             </iframe>
                         </div>
-
                         <p class="text-[11px] text-slate-500 italic text-center">Thanh toán trực tiếp bằng tiền mặt hoặc chuyển khoản khi bạn đến nhận hàng tại tiệm.</p>
                     </div>
                 </div>
-
-                <!-- TÓM TẮT ĐƠN HÀNG -->
                 <div class="lg:col-span-5">
                     <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm sticky top-28 space-y-6">
                         <h2 class="text-lg font-bold text-dark border-b border-slate-100 pb-3">Sản Phẩm Đặt Giữ</h2>
-                        
                         <div id="checkout-items-list" class="space-y-3 max-h-64 overflow-y-auto pr-2">
-                            <!-- Danh sách sản phẩm -->
                         </div>
-
                         <div class="space-y-2 pt-4 border-t border-slate-100 text-sm">
                             <div class="flex justify-between text-slate-600">
                                 <span>Tạm tính:</span>
@@ -132,12 +113,10 @@
                                 <span class="font-bold text-emerald-600">0đ (Nhận tại quầy)</span>
                             </div>
                         </div>
-
                         <div class="flex justify-between text-base font-extrabold pt-4 border-t border-slate-200">
                             <span class="text-dark">Tổng tiền thanh toán:</span>
                             <span id="co-total" class="text-brand-600 text-xl">0đ</span>
                         </div>
-
                         <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-600/30 transition text-center block">
                             Xác Nhận Đặt Giữ Hàng
                         </button>
@@ -146,8 +125,6 @@
             </form>
         </div>
     </section>
-
-    <!-- FOOTER -->
     <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-sm">
         <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-8 mb-8">
             <div class="md:col-span-5 space-y-4">
@@ -165,7 +142,6 @@
                     <p><i class="fa-solid fa-phone text-brand-500 w-5"></i> 0978 031 871</p>
                 </div>
             </div>
-
             <div class="md:col-span-3 space-y-3">
                 <h4 class="text-white font-bold text-xs uppercase tracking-wider">Khám Phá</h4>
                 <ul class="space-y-2 text-xs">
@@ -174,7 +150,6 @@
                     <li><a href="contact.html" class="hover:text-white transition">Liên Hệ Trực Tuyến</a></li>
                 </ul>
             </div>
-
             <div class="md:col-span-4 space-y-3">
                 <h4 class="text-white font-bold text-xs uppercase tracking-wider">Hỗ Trợ Khách Hàng</h4>
                 <p class="text-xs text-slate-400">Nhận thông tin các chương trình khuyến mãi và mã giảm giá mới nhất từ cửa hàng.</p>
@@ -184,7 +159,6 @@
                 </div>
             </div>
         </div>
-
         <div class="max-w-7xl mx-auto px-6 pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
             <p>&copy; 2026 Nhà Sách & Văn Phòng Phẩm Khánh Quyên. All rights reserved.</p>
             <div class="flex items-center space-x-4">
@@ -192,14 +166,12 @@
             </div>
         </div>
     </footer>
-
     <script>
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         if (currentUser) {
             if (currentUser.fullName) document.getElementById('c-name').value = currentUser.fullName;
             if (currentUser.phone) document.getElementById('c-phone').value = currentUser.phone;
         }
-
         function loadCheckoutSummary() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             if (cart.length === 0) {
@@ -207,10 +179,8 @@
                 window.location.href = 'cart.html';
                 return;
             }
-
             const container = document.getElementById('checkout-items-list');
             let subtotal = 0;
-
             container.innerHTML = cart.map(item => {
                 subtotal += item.price * item.quantity;
                 return `
@@ -226,25 +196,20 @@
                     </div>
                 `;
             }).join('');
-
             const discountActive = sessionStorage.getItem('discountActive') === 'true';
             const discount = discountActive ? subtotal * 0.3 : 0;
             const total = subtotal - discount;
-
             document.getElementById('co-subtotal').innerText = subtotal.toLocaleString('vi-VN') + 'đ';
             document.getElementById('co-discount').innerText = '-' + discount.toLocaleString('vi-VN') + 'đ';
             document.getElementById('co-total').innerText = total.toLocaleString('vi-VN') + 'đ';
         }
-
         function handlePlaceOrder(e) {
             e.preventDefault();
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             if (cart.length === 0) return;
-
             const discountActive = sessionStorage.getItem('discountActive') === 'true';
             let subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
             let totalAmount = discountActive ? subtotal * 0.7 : subtotal;
-
             const orderData = {
                 customer_name: document.getElementById('c-name').value.trim(),
                 phone: document.getElementById('c-phone').value.trim(),
@@ -254,20 +219,119 @@
                 total_amount: totalAmount,
                 created_at: new Date().toISOString()
             };
-
-            // Lưu đơn hàng vào localStorage thay vì gọi Server/Supabase
             let localOrders = JSON.parse(localStorage.getItem('localOrders')) || [];
             localOrders.unshift(orderData);
             localStorage.setItem('localOrders', JSON.stringify(localOrders));
-
             localStorage.removeItem('cart');
             sessionStorage.removeItem('discountActive');
-
             alert('Đặt giữ hàng thành công! Cảm ơn bạn đã ủng hộ nhà sách.');
             window.location.href = 'index.html';
         }
-
         loadCheckoutSummary();
     </script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+</script>
+<div id="mobile-nav-container"></div>
+</script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+    </script>
+    <div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index")) highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("cart")) highlightNav("nav-cart");
+            else if (currentPage.includes("profile")) highlightNav("nav-profile");
+        });
+    function highlightNav(id) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('text-slate-500', 'font-medium');
+            el.classList.add('text-brand-600', 'font-bold');
+        }
+    }
+</script>
+<div id="mobile-nav-container"></div>
+<script>
+    fetch('mobile-nav.html')
+        .then(res => res.text())
+        .then(data => {
+            document.getElementById('mobile-nav-container').innerHTML = data;
+            function highlightNav(id) {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.classList.remove('text-slate-700', 'font-medium');
+                    el.classList.add('text-brand-600', 'font-bold');
+                }
+            }
+            const currentPage = window.location.pathname.split("/").pop() || "index.html";
+            if (currentPage.includes("index") || currentPage === "") highlightNav("nav-home");
+            else if (currentPage.includes("product")) highlightNav("nav-products");
+            else if (currentPage.includes("contact")) highlightNav("nav-contact");
+            const authSlot = document.getElementById('nav-auth-slot');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (authSlot) {
+                if (currentUser) {
+                    const fullName = currentUser.full_name || currentUser.fullName || "Tài khoản";
+                    const shortName = fullName.split(" ").pop() || "Cá nhân";
+                    const avatar = currentUser.avatar || "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+                    authSlot.innerHTML = `
+                        <a href="profile.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <img src="${avatar}" class="w-5 h-5 rounded-full object-cover mb-1 border border-white/60 shadow-sm">
+                            <span class="max-w-[50px] truncate">${shortName}</span>
+                        </a>
+                    `;
+                    if (currentPage.includes("profile")) highlightNav("nav-auth");
+                } else {
+                    authSlot.innerHTML = `
+                        <a href="login.html" id="nav-auth" class="flex flex-col items-center text-slate-700 text-[10px] font-medium transition py-0.5">
+                            <i class="fa-solid fa-right-to-bracket text-base mb-1"></i> Đăng Nhập
+                        </a>
+                    `;
+                    if (currentPage.includes("login") || currentPage.includes("register")) highlightNav("nav-auth");
+                }
+            }
+        });
+</script>
 </body>
 </html>

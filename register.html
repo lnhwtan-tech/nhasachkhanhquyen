@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng Ký Tài Khoản - Nhà Sách Khánh Quyên</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Thêm thư viện Supabase JS SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -22,185 +21,435 @@
             }
         }
     </script>
-    <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+        .toast-animate-in { animation: slideIn 0.3s ease-out forwards; }
+        .toast-animate-out { animation: fadeOut 0.3s ease-in forwards; }
+    </style>
 </head>
-<body class="bg-slate-900 text-slate-800 min-h-screen flex items-center justify-center p-6 relative overflow-x-hidden">
-
-    <!-- HIỆU ỨNG NỀN TRANG TRÍ -->
-    <div class="absolute -top-40 -left-40 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-
-    <div class="w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden relative z-10 my-8">
-        
-        <!-- HEADER FORM -->
-        <div class="bg-dark text-white p-8 text-center relative">
-            <a href="index.html" class="absolute top-6 left-6 bg-slate-800 hover:bg-slate-700 w-10 h-10 rounded-xl flex items-center justify-center text-slate-300 transition" title="Về trang chủ">
+<body class="bg-slate-50 text-slate-800 min-h-screen flex items-center justify-center p-4 sm:p-6 relative overflow-x-hidden" onclick="closeAllCustomDropdowns(event)">
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+    <div id="loadingOverlay" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex flex-col items-center justify-center text-white hidden">
+        <div class="w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mb-3"></div>
+        <p id="loadingText" class="text-sm font-bold tracking-wide">Đang xử lý hệ thống...</p>
+    </div>
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-red-100 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-blue-100 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="w-full max-w-xl bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden relative z-10 my-6">
+        <div class="bg-gradient-to-r from-slate-900 to-slate-800 text-white p-6 sm:p-8 text-center relative">
+            <a href="index.html" class="absolute top-6 left-6 bg-white/10 hover:bg-white/20 w-10 h-10 rounded-xl flex items-center justify-center text-slate-200 transition" title="Về trang chủ">
                 <i class="fa-solid fa-house text-sm"></i>
             </a>
-            <div class="bg-brand-600 text-white w-12 h-12 rounded-2xl mx-auto flex items-center justify-center font-extrabold text-xl shadow-lg mb-3">KQ</div>
-            <h1 class="text-2xl font-extrabold tracking-tight">Tạo Tài Khoản Thành Viên</h1>
-            <p class="text-xs text-slate-400 mt-1">Tham gia ngay cùng Nhà sách & Văn phòng phẩm Khánh Quyên</p>
+            <div class="w-16 h-16 rounded-2xl mx-auto flex items-center justify-center bg-white shadow-md p-1.5 mb-3">
+                <img src="khanhquyen.png" alt="Logo Khánh Quyên" class="w-full h-full object-contain rounded-xl" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="w-full h-full bg-brand-600 text-white font-extrabold text-xl rounded-xl items-center justify-center hidden">KQ</div>
+            </div>
+            <h1 class="text-xl sm:text-2xl font-extrabold tracking-tight">Tạo Tài Khoản Thành Viên</h1>
+            <p class="text-xs text-slate-400 mt-1">Đăng ký thành viên Nhà sách & Văn phòng phẩm Khánh Quyên</p>
         </div>
-
-        <!-- FORM ĐĂNG KÝ -->
-        <form onsubmit="handleRegister(event)" class="p-8 space-y-6">
-            
-            <!-- TẢI LÊN ẢNH ĐẠI DIỆN TỪ MÁY TÍNH -->
+        <form id="registerForm" onsubmit="handleRegister(event)" class="p-6 sm:p-8 space-y-5">
             <div>
-                <label class="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider text-center">Ảnh Đại Diện (Tải lên từ máy hoặc chọn mẫu)</label>
-                
-                <div class="flex flex-col items-center justify-center gap-4">
-                    <!-- Khu vực hiển thị preview ảnh -->
-                    <div class="relative group">
-                        <div class="w-24 h-24 rounded-2xl bg-slate-100 border-2 border-slate-200 overflow-hidden shadow-md flex items-center justify-center">
-                            <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="w-full h-full object-cover">
-                        </div>
+                <label class="block text-xs font-bold text-slate-600 mb-2 uppercase tracking-wider text-center">Ảnh Đại Diện</label>
+                <div class="flex flex-col items-center justify-center gap-3">
+                    <div class="w-20 h-20 rounded-2xl bg-slate-100 border-2 border-slate-200 overflow-hidden shadow-sm flex items-center justify-center">
+                        <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="w-full h-full object-cover">
                     </div>
-
-                    <!-- Nút chọn file tùy chỉnh -->
-                    <div class="flex items-center gap-3">
-                        <label class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer transition shadow flex items-center gap-2">
-                            <i class="fa-solid fa-upload"></i> Chọn ảnh từ máy tính
+                    <div class="flex items-center gap-2">
+                        <label class="bg-slate-900 hover:bg-slate-800 text-white px-3.5 py-2 rounded-xl text-xs font-bold cursor-pointer transition shadow-sm flex items-center gap-2">
+                            <i class="fa-solid fa-upload"></i> Chọn ảnh từ máy
                             <input type="file" id="uploadAvatar" accept="image/*" onchange="handleImageUpload(event)" class="hidden">
                         </label>
-                        <button type="button" onclick="useDefaultAvatar()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2.5 rounded-xl text-xs font-bold transition">Dùng mẫu gợi ý</button>
+                        <button type="button" onclick="useDefaultAvatar()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-2 rounded-xl text-xs font-bold transition">Mẫu ngẫu nhiên</button>
                     </div>
                 </div>
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- TÊN TÀI KHOẢN (USERNAME) -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-2 uppercase">Tên tài khoản (Username)</label>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Tên tài khoản (Username)</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-at"></i></span>
-                        <input type="text" id="username" placeholder="Ví dụ: tantan99..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-at text-xs"></i></span>
+                        <input type="text" id="username" autocomplete="username" placeholder="Ví dụ: tantan99..." onblur="checkUsernameExist()" required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
                     </div>
+                    <p id="usernameError" class="text-[11px] text-brand-600 mt-1 hidden"></p>
                 </div>
-
-                <!-- HỌ VÀ TÊN -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-2 uppercase">Họ và tên hiển thị</label>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Họ và tên hiển thị</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-user"></i></span>
-                        <input type="text" id="fullname" placeholder="Ví dụ: Nguyễn Văn Tân..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-user text-xs"></i></span>
+                        <input type="text" id="fullname" autocomplete="name" placeholder="Ví dụ: Nguyễn Văn Tân..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
                     </div>
                 </div>
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- SỐ ĐIỆN THOẠI -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-2 uppercase">Số điện thoại</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-phone"></i></span>
-                        <input type="tel" id="phone" placeholder="090xxxxxxxx..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Số điện thoại (+84)</label>
+                    <div class="relative flex">
+                        <span class="inline-flex items-center px-3 bg-slate-100 border border-r-0 border-slate-200 rounded-l-xl text-slate-600 text-xs font-bold select-none">+84</span>
+                        <input type="tel" id="phone" autocomplete="tel" placeholder="90xxxxxxx (10 số)" oninput="checkPhoneFormat()" required class="w-full bg-slate-50 border border-slate-200 rounded-r-xl px-4 py-2.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
                     </div>
+                    <p id="phoneError" class="text-[11px] text-brand-600 mt-1 hidden"></p>
                 </div>
-
-                <!-- MẬT KHẨU -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-2 uppercase">Mật khẩu</label>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Mật khẩu</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-lock"></i></span>
-                        <input type="password" id="password" placeholder="Mật khẩu bảo mật..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-lock text-xs"></i></span>
+                        <input type="password" id="password" autocomplete="new-password" placeholder="Mật khẩu bảo mật..." oninput="checkPasswordStrength()" required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                        <button type="button" onclick="togglePasswordVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+                            <i id="togglePasswordIcon" class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                    </div>
+                    <div class="mt-2 space-y-1">
+                        <div class="flex gap-1 h-1.5 w-full bg-slate-100 rounded-full overflow-hidden">
+                            <div id="strengthBar1" class="w-1/4 h-full bg-slate-200 transition-all"></div>
+                            <div id="strengthBar2" class="w-1/4 h-full bg-slate-200 transition-all"></div>
+                            <div id="strengthBar3" class="w-1/4 h-full bg-slate-200 transition-all"></div>
+                            <div id="strengthBar4" class="w-1/4 h-full bg-slate-200 transition-all"></div>
+                        </div>
+                        <p id="passwordFeedback" class="text-[11px] text-slate-400">Mật khẩu cần tối thiểu 6 ký tự.</p>
                     </div>
                 </div>
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <!-- EMAIL -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-2 uppercase">Địa chỉ Email</label>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Xác nhận mật khẩu</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-envelope"></i></span>
-                        <input type="email" id="email" placeholder="example@gmail.com..." required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-lock text-xs"></i></span>
+                        <input type="password" id="confirmPassword" autocomplete="new-password" placeholder="Nhập lại mật khẩu..." oninput="checkPasswordMatch()" required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                        <button type="button" onclick="toggleConfirmPasswordVisibility()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600">
+                            <i id="toggleConfirmPasswordIcon" class="fa-solid fa-eye text-xs"></i>
+                        </button>
                     </div>
+                    <p id="confirmPasswordFeedback" class="text-[11px] text-slate-400 mt-1 hidden"></p>
                 </div>
-
-                <!-- GIỚI TÍNH -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-600 mb-2 uppercase">Giới tính</label>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Địa chỉ Email</label>
                     <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-venus-mars"></i></span>
-                        <select id="gender" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-4 py-3 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
-                            <option value="Nam">Nam</option>
-                            <option value="Nữ">Nữ</option>
-                            <option value="Khác">Khác</option>
-                        </select>
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400"><i class="fa-solid fa-envelope text-xs"></i></span>
+                        <input type="email" id="email" autocomplete="email" placeholder="example@gmail.com..." onblur="checkEmailExist()" required class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                    </div>
+                    <p id="emailError" class="text-[11px] text-brand-600 mt-1 hidden"></p>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1.5 uppercase">Giới tính</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400 z-10 pointer-events-none"><i class="fa-solid fa-venus-mars text-xs"></i></span>
+                        <div id="genderDropdown" class="relative">
+                            <button type="button" onclick="toggleCustomDropdown('gender')" class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-left flex items-center justify-between focus:outline-none focus:border-brand-600 focus:bg-white transition">
+                                <span id="genderSelectedText" class="text-slate-800">Nam</span>
+                                <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200" id="genderChevron"></i>
+                            </button>
+                            <div id="genderMenu" class="absolute left-0 right-0 mt-1 bg-white border border-slate-200 rounded-xl shadow-lg z-30 hidden overflow-hidden">
+                                <div class="p-1 space-y-0.5">
+                                    <div onclick="selectCustomOption('gender', 'Nam', 'Nam')" class="px-3 py-2 text-xs rounded-lg hover:bg-slate-100 cursor-pointer font-medium transition">Nam</div>
+                                    <div onclick="selectCustomOption('gender', 'Nữ', 'Nữ')" class="px-3 py-2 text-xs rounded-lg hover:bg-slate-100 cursor-pointer font-medium transition">Nữ</div>
+                                    <div onclick="selectCustomOption('gender', 'Khác', 'Khác')" class="px-3 py-2 text-xs rounded-lg hover:bg-slate-100 cursor-pointer font-medium transition">Khác</div>
+                                </div>
+                            </div>
+                            <input type="hidden" id="genderValue" value="Nam">
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- NÚT ĐĂNG KÝ -->
-            <button type="submit" id="register-btn" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-brand-600/30 transition text-sm flex items-center justify-center gap-2">
-                <i class="fa-solid fa-user-plus"></i> Đăng Ký Tài Khoản Ngay
+            <div class="bg-slate-50 border border-slate-200 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <input type="checkbox" id="robotCheckbox" required class="w-5 h-5 text-brand-600 border-slate-300 rounded focus:ring-brand-500 cursor-pointer">
+                    <label for="robotCheckbox" class="text-xs font-bold text-slate-700 select-none cursor-pointer">Tôi không phải người máy</label>
+                </div>
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                    <span id="captchaQuestion" class="text-xs font-extrabold text-slate-600 bg-white px-3 py-2 rounded-xl border border-slate-200 shadow-sm"></span>
+                    <input type="number" id="captchaAnswer" placeholder="Kết quả?" required class="w-24 bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-center focus:outline-none focus:border-brand-600 shadow-sm">
+                </div>
+            </div>
+            <div class="flex items-start gap-2.5 pt-1">
+                <input type="checkbox" id="termsCheckbox" required class="mt-0.5 w-4 h-4 text-brand-600 border-slate-300 rounded focus:ring-brand-500 cursor-pointer">
+                <label for="termsCheckbox" class="text-xs text-slate-600 select-none cursor-pointer">
+                    Tôi đồng ý với <a href="terms.html" target="_blank" class="text-brand-600 font-bold hover:underline">Điều khoản dịch vụ</a> và <a href="privacy.html" target="_blank" class="text-brand-600 font-bold hover:underline">Chính sách bảo mật</a> của Nhà sách Khánh Quyên.
+                </label>
+            </div>
+            <button type="submit" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-brand-600/25 transition text-sm flex items-center justify-center gap-2 mt-2">
+                <i class="fa-solid fa-user-plus"></i> Hoàn Tất Đăng Ký Tài Khoản
             </button>
-
             <div class="text-center pt-2">
                 <span class="text-xs text-slate-500">Đã có tài khoản trên hệ thống?</span> 
                 <a href="login.html" class="text-xs font-bold text-brand-600 hover:underline ml-1">Đăng nhập tại đây</a>
             </div>
         </form>
     </div>
-
     <script>
         const supabaseUrl = 'https://dngnkhzliwsdmytrvoae.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRuZ25raHpsaXdzZG15dHJ2b2FlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg0MDkyMjcsImV4cCI6MjEwMzk4NTIyN30.fqZuesECwMbvbcnc4XSyGZZrPxTG5YbrPk1MlNHZB58';
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
         let userAvatarData = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
-
-        // Xử lý khi người dùng chọn file ảnh từ máy tính
+        let correctAnswer = 0;
+        function toggleCustomDropdown(name) {
+            const menu = document.getElementById(`${name}Menu`);
+            const chevron = document.getElementById(`${name}Chevron`);
+            const isHidden = menu.classList.contains('hidden');
+            closeAllCustomDropdowns();
+            if (isHidden) {
+                menu.classList.remove('hidden');
+                chevron.classList.add('rotate-180');
+            }
+        }
+        function closeAllCustomDropdowns(e) {
+            const menu = document.getElementById('genderMenu');
+            const chevron = document.getElementById('genderChevron');
+            if (menu && !menu.classList.contains('hidden')) {
+                const container = document.getElementById('genderDropdown');
+                if (!e || !container.contains(e.target)) {
+                    menu.classList.add('hidden');
+                    if (chevron) chevron.classList.remove('rotate-180');
+                }
+            }
+        }
+        function selectCustomOption(name, value, label) {
+            document.getElementById(`${name}Value`).value = value;
+            document.getElementById(`${name}SelectedText`).textContent = label;
+            document.getElementById(`${name}SelectedText`).classList.remove('text-slate-400');
+            document.getElementById(`${name}SelectedText`).classList.add('text-slate-800');
+            document.getElementById(`${name}Menu`).classList.add('hidden');
+            document.getElementById(`${name}Chevron`).classList.remove('rotate-180');
+        }
+        function generateCaptcha() {
+            const num1 = Math.floor(Math.random() * 10) + 1;
+            const num2 = Math.floor(Math.random() * 10) + 1;
+            correctAnswer = num1 + num2;
+            document.getElementById('captchaQuestion').textContent = `${num1} + ${num2} =`;
+            document.getElementById('captchaAnswer').value = '';
+        }
+        window.onload = function() {
+            generateCaptcha();
+        };
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            let bgColors = 'bg-slate-900 text-white';
+            let icon = '<i class="fa-solid fa-circle-check text-emerald-400"></i>';
+            if (type === 'error') {
+                bgColors = 'bg-red-600 text-white';
+                icon = '<i class="fa-solid fa-circle-exclamation text-white"></i>';
+            } else if (type === 'warning') {
+                bgColors = 'bg-amber-500 text-white';
+                icon = '<i class="fa-solid fa-triangle-exclamation text-white"></i>';
+            }
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl shadow-xl text-xs font-bold ${bgColors} toast-animate-in`;
+            toast.innerHTML = `${icon} <span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.remove('toast-animate-in');
+                toast.classList.add('toast-animate-out');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+        function showLoading(text = "Đang xử lý hệ thống...") {
+            document.getElementById('loadingText').textContent = text;
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+        }
+        function hideLoading() {
+            document.getElementById('loadingOverlay').classList.add('hidden');
+        }
         function handleImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    userAvatarData = e.target.result; // Chuyển ảnh thành chuỗi base64
+                    userAvatarData = e.target.result;
                     document.getElementById('avatarPreview').src = userAvatarData;
                 }
                 reader.readAsDataURL(file);
             }
         }
-
-        // Quay lại dùng ảnh mặc định nếu không muốn tải ảnh lên
         function useDefaultAvatar() {
             userAvatarData = "https://api.dicebear.com/7.x/avataaars/svg?seed=" + Math.random();
             document.getElementById('avatarPreview').src = userAvatarData;
             document.getElementById('uploadAvatar').value = '';
         }
-
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('togglePasswordIcon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        function toggleConfirmPasswordVisibility() {
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const toggleIcon = document.getElementById('toggleConfirmPasswordIcon');
+            if (confirmPasswordInput.type === 'password') {
+                confirmPasswordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                confirmPasswordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        function checkPhoneFormat() {
+            const phoneInput = document.getElementById('phone').value.trim();
+            const errorEl = document.getElementById('phoneError');
+            const phoneRegex = /^(03|05|07|08|09)\d{8}$/;
+            if (phoneInput.length === 0) {
+                errorEl.classList.add('hidden');
+                return true;
+            }
+            if (!phoneRegex.test(phoneInput)) {
+                errorEl.textContent = "Số điện thoại không hợp lệ (Phải đủ 9 số và bắt đầu bằng 3, 5, 7, 8, 9)";
+                errorEl.classList.remove('hidden');
+                return false;
+            } else {
+                errorEl.classList.add('hidden');
+                return true;
+            }
+        }
+        function checkPasswordStrength() {
+            const val = document.getElementById('password').value;
+            const b1 = document.getElementById('strengthBar1');
+            const b2 = document.getElementById('strengthBar2');
+            const b3 = document.getElementById('strengthBar3');
+            const b4 = document.getElementById('strengthBar4');
+            const feedback = document.getElementById('passwordFeedback');
+            let score = 0;
+            if (val.length >= 6) score++;
+            if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+            if (/[0-9]/.test(val)) score++;
+            if (/[^A-Za-z0-9]/.test(val)) score++;
+            [b1, b2, b3, b4].forEach(b => b.className = "w-1/4 h-full bg-slate-200 transition-all");
+            if (val.length === 0) {
+                feedback.textContent = "Mật khẩu cần tối thiểu 6 ký tự.";
+                feedback.className = "text-[11px] text-slate-400";
+                checkPasswordMatch();
+                return;
+            }
+            if (score <= 1) {
+                b1.className = "w-1/4 h-full bg-red-500 transition-all";
+                feedback.textContent = "Mật khẩu yếu.";
+                feedback.className = "text-[11px] text-red-500 font-bold";
+            } else if (score === 2 || score === 3) {
+                b1.className = "w-1/4 h-full bg-amber-500 transition-all";
+                b2.className = "w-1/4 h-full bg-amber-500 transition-all";
+                if(score === 3) b3.className = "w-1/4 h-full bg-amber-500 transition-all";
+                feedback.textContent = "Mật khẩu ở mức trung bình.";
+                feedback.className = "text-[11px] text-amber-600 font-bold";
+            } else {
+                b1.className = "w-1/4 h-full bg-emerald-500 transition-all";
+                b2.className = "w-1/4 h-full bg-emerald-500 transition-all";
+                b3.className = "w-1/4 h-full bg-emerald-500 transition-all";
+                b4.className = "w-1/4 h-full bg-emerald-500 transition-all";
+                feedback.textContent = "Mật khẩu rất mạnh!";
+                feedback.className = "text-[11px] text-emerald-600 font-bold";
+            }
+            checkPasswordMatch();
+        }
+        function checkPasswordMatch() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const feedback = document.getElementById('confirmPasswordFeedback');
+            if (confirmPassword.length === 0) {
+                feedback.classList.add('hidden');
+                return;
+            }
+            feedback.classList.remove('hidden');
+            if (password === confirmPassword) {
+                feedback.textContent = "Mật khẩu trùng khớp!";
+                feedback.className = "text-[11px] text-emerald-600 font-bold mt-1";
+            } else {
+                feedback.textContent = "Mật khẩu xác nhận không khớp!";
+                feedback.className = "text-[11px] text-brand-600 font-bold mt-1";
+            }
+        }
+        async function checkUsernameExist() {
+            const username = document.getElementById('username').value.trim();
+            const errorEl = document.getElementById('usernameError');
+            if (!username) return;
+            try {
+                const { data } = await supabaseClient
+                    .from('users')
+                    .select('username')
+                    .eq('username', username)
+                    .maybeSingle();
+                if (data) {
+                    errorEl.textContent = "Tên tài khoản này đã được sử dụng!";
+                    errorEl.classList.remove('hidden');
+                } else {
+                    errorEl.classList.add('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+        async function checkEmailExist() {
+            const email = document.getElementById('email').value.trim();
+            const errorEl = document.getElementById('emailError');
+            if (!email) return;
+            try {
+                const { data } = await supabaseClient
+                    .from('users')
+                    .select('email')
+                    .eq('email', email)
+                    .maybeSingle();
+                if (data) {
+                    errorEl.textContent = "Email này đã được đăng ký tài khoản khác!";
+                    errorEl.classList.remove('hidden');
+                } else {
+                    errorEl.classList.add('hidden');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
         async function handleRegister(e) {
             e.preventDefault();
-
-            const registerBtn = document.getElementById('register-btn');
+            if (!checkPhoneFormat()) {
+                showToast('Vui lòng kiểm tra lại định dạng số điện thoại!', 'error');
+                document.getElementById('phone').focus();
+                return;
+            }
+            const password = document.getElementById('password').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            if (password !== confirmPassword) {
+                showToast('Mật khẩu xác nhận không chính xác!', 'error');
+                document.getElementById('confirmPassword').focus();
+                return;
+            }
+            const userCaptchaInput = parseInt(document.getElementById('captchaAnswer').value);
+            if (userCaptchaInput !== correctAnswer) {
+                showToast('Kết quả xác minh "Tôi không phải người máy" không chính xác!', 'error');
+                generateCaptcha();
+                return;
+            }
             const username = document.getElementById('username').value.trim();
             const fullName = document.getElementById('fullname').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const phone = "+84" + document.getElementById('phone').value.trim();
             const email = document.getElementById('email').value.trim();
-            const gender = document.getElementById('gender').value;
-
-            registerBtn.disabled = true;
-            registerBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Đang xử lý đăng ký...`;
-
+            const gender = document.getElementById('genderValue').value;
+            showLoading("Đang khởi tạo tài khoản trên hệ thống...");
             try {
-                // Kiểm tra xem username đã tồn tại chưa
-                const { data: existingUser, error: checkError } = await supabaseClient
+                const { data: existingUser } = await supabaseClient
                     .from('users')
                     .select('*')
                     .eq('username', username)
                     .maybeSingle();
-
                 if (existingUser) {
-                    showCustomAlert("Thông báo", 'Tên tài khoản (username) này đã có người sử dụng. Vui lòng chọn tên khác!', "info");
-                    registerBtn.disabled = false;
-                    registerBtn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Đăng Ký Tài Khoản Ngay`;
+                    hideLoading();
+                    showToast('Tên tài khoản này đã có người sử dụng. Vui lòng chọn tên khác!', 'error');
                     return;
                 }
-
-                // Đối tượng user mới để lưu vào database và localStorage
                 const newUserObj = {
                     username: username,
                     full_name: fullName,
@@ -211,27 +460,22 @@
                     avatar: userAvatarData,
                     role: 'customer'
                 };
-
-                // Insert dữ liệu mới vào bảng users
-                const { data, error } = await supabaseClient
+                const { data: insertData, error: insertError } = await supabaseClient
                     .from('users')
                     .insert([newUserObj])
-                    .select(); // Thêm .select() để lấy lại object hoàn chỉnh (bao gồm id vừa sinh ra nếu cần)
-
-                if (error) throw error;
-
-                // Lưu thông tin phiên đăng nhập vào localStorage giống hệt logic trang đăng nhập
-                const registeredUser = (data && data.length > 0) ? data[0] : newUserObj;
+                    .select();
+                if (insertError) throw insertError;
+                const registeredUser = (insertData && insertData.length > 0) ? insertData[0] : newUserObj;
                 localStorage.setItem('currentUser', JSON.stringify(registeredUser));
-
-showCustomAlert("Thông báo", 'Đăng ký tài khoản thành công! Chào mừng bạn đến với Khánh Quyên.', "info");
-                window.location.href = 'index.html';
-
+                hideLoading();
+                showToast('Đăng ký tài khoản thành công!');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1000);
             } catch (err) {
+                hideLoading();
                 console.error('Lỗi đăng ký:', err.message);
-                alert('Có lỗi xảy ra khi đăng ký: ' + err.message);
-                registerBtn.disabled = false;
-                registerBtn.innerHTML = `<i class="fa-solid fa-user-plus"></i> Đăng Ký Tài Khoản Ngay`;
+                showToast('Có lỗi xảy ra: ' + err.message, 'error');
             }
         }
     </script>
